@@ -1,0 +1,212 @@
+/* Réinitialisation globale */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Conteneur principal */
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+/* Image de fond entière et responsive */
+.app-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/image.jpg');
+  background-size: contain; /* garde l'image entière */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: black;
+  z-index: -1;
+}
+
+/* Overlay assombri quand menu ouvert */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 15;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem 1.5rem;
+  position: relative;
+  z-index: 20;
+}
+
+/* Conteneur du titre à gauche */
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 1rem;/* pour l'espace entre la ligne de l'écran gauche et le texte*/
+  margin-top: 5rem;/* pour la position du haut de l'écrans et la phrase bienvenue*/
+}  
+/* Texte "Bienvenue sur" */
+.small-title {
+  font-family: 'Honest', sans-serif;
+  font-size: 1.75rem; /* ~28pt */
+  margin-bottom: 0.1rem; /* petit entre bienvenue sur et yaka en bas */
+}
+
+/* Logo Yaka */
+.logo {
+ /* font-family: 'Bebas Neue', sans-serif; code pour introduire une police */ 
+  font-size: 4rem; /* ~96pt */
+  font-weight: 800;/* ~96pt grandeur et epaiseur de yaka */
+  color: #Fe8b10;
+  margin-bottom: 0.25rem; /* petit espace */
+}
+
+/* Sous-titre */
+.subtitle {
+  font-size: 0.90rem; /* ~20pt taille de la police de motre applis mobile */
+  line-height: 1.2rem;/* espace entre de paragraphe en bas de yaka */
+  color: white;
+  text-align: left;
+  margin-bottom: 0.5rem; /* espace respirable */
+}
+
+/* Menu hamburger */
+.menu-button {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 20;
+}
+
+/* Menu coulissant */
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: -60%;
+  width: 60%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.95);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  transition: right 0.3s ease;
+  z-index: 25;
+}
+
+.side-menu.open {
+  right: 0;
+}
+
+.close-button {
+  align-self: flex-end;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.menu-buttons button {
+  background-color: #fe8b10;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  text-align: left;
+}
+
+.menu-buttons button:hover {
+  background-color: #fe8b10;
+  transform: translateX(5px);
+}
+
+/* Bottom Section centré horizontalement */
+.bottom-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centre horizontal */
+  margin-bottom: 1rem;
+}
+
+.cta-button {
+  background-color: #fe8b10;
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 0.3rem; /* petit espace avec le texte */
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.cta-button:hover {
+  background-color: #fe8b10;
+  transform: scale(1.05);
+}
+
+/* Footer sous le bouton */
+footer {
+  font-size: 0.75rem;
+  color: #d1d1d1;
+  text-align: center;
+}
+
+/* Responsive Desktop */
+@media (min-width: 768px) {
+  .title-container {
+    margin-top: 5vh;
+    margin-left: 5vw;
+    max-width: 35rem;
+  }
+
+  .logo {
+    font-size: 7rem; /* ~112pt */
+  }
+
+  .subtitle {
+    font-size: 1.5rem; /* ~24pt */
+    line-height: 2rem;
+  }
+
+  .small-title {
+    font-size: 2rem; /* ~32pt */
+  }
+}

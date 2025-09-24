@@ -1,0 +1,55 @@
+.finmessage-root {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #131212;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  font-family: Arial, sans-serif;
+  color: #fff;
+  text-align: center;
+}
+
+.finmessage-root h1 {
+  color: #fe8b10;
+  margin-bottom: 1rem;
+}
+
+.finmessage-root p {
+  font-size: 1.1rem;
+  margin: 0.8rem 0;
+}
+
+.finmessage-root ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.finmessage-root li {
+  margin-bottom: 0.5rem;
+}
+
+.cta-button {
+  margin-top: 1.5rem;
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  background-color: #fe8b10;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
+
+.finmessage-root a {
+  color: #fe8b10;
+  text-decoration: underline;
+  font-weight: 600;
+}
