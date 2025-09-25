@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/Contact.css";
 import bg from "../assets/image.jpg"; // ton image
 
+
 const Accueil: React.FC = () => {
   return (
     <div className="accueil-root">
@@ -27,7 +28,7 @@ Parmi nos solutions phares, Yaka Mobile se distingue comme une application révo
       </header>
 
       <div className="bottom-sections">
-        <Link to="/reservations">
+        <Link to="/Nouscontacter">
           <button className="cta-buttons">Contacter l'entreprise</button>
         </Link>
         <footer className="accueil-footers">

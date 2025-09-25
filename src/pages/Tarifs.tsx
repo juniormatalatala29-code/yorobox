@@ -16,7 +16,7 @@ const Accueil: React.FC = () => {
       <header className="Tarifs-header"></header>
 
       <div className="bottom-section">
-        <Link to="/reservation">
+        <Link to="/formulaire">
           <button className="ctas-button">  Suivant  </button>
         </Link>
         <footer className="Tarifs-footer">
