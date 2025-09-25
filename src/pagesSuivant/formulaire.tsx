@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/flatpickr.min.css"; // styles Flatpickr
 import "../styles/ReservationForm.css";
 
 const ReservationForm: React.FC = () => {
@@ -38,11 +40,8 @@ const ReservationForm: React.FC = () => {
       await emailjs.send(serviceID, templateID, { ...formData }, publicKey);
 
       alert("✅ Votre réservation a été envoyée !");
-
-      // Redirection vers la page de confirmation avec les infos
       navigate("/finmessage", { state: { ...formData } });
 
-      // Reset du formulaire
       setFormData({
         nomComplet: "",
         commune: "",
@@ -138,8 +137,33 @@ const ReservationForm: React.FC = () => {
           min={1}
           required
         />
-        <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-        <input type="time" name="heure" value={formData.heure} onChange={handleChange} required />
+
+        {/* Flatpickr pour la Date */}
+        <Flatpickr
+          value={formData.date}
+          options={{ dateFormat: "Y-m-d" }}
+          onChange={(selectedDates) =>
+            setFormData({ ...formData, date: selectedDates[0]?.toISOString().split("T")[0] || "" })
+          }
+          className="flatpickr-input"
+          placeholder="Choisir la date"
+        />
+
+        {/* Flatpickr pour l’Heure */}
+        <Flatpickr
+          value={formData.heure}
+          options={{
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+          }}
+          onChange={(selectedDates) =>
+            setFormData({ ...formData, heure: selectedDates[0]?.toTimeString().slice(0, 5) || "" })
+          }
+          className="flatpickr-input"
+          placeholder="Choisir l’heure"
+        />
 
         <button type="submit" className="reservation-button" disabled={loading}>
           {loading ? "Envoi..." : "Envoyer"}
