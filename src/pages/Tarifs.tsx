@@ -17,7 +17,7 @@ const Accueil: React.FC = () => {
 
       <div className="bottom-section">
         <Link to="/formulaire">
-          <button className="ctas-button">  Suivant  </button>
+          <button className="cta-button">Commencer ma réservation</button>
         </Link>
         <footer className="Tarifs-footer">
           Une Application Web développée par YoroBox

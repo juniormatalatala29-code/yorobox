@@ -19,7 +19,7 @@ const Accueil: React.FC = () => {
       <div className="bottom-section">
         {/* Le bouton mène vers la route /suivanttarifs */}
         <Link to="/formulaire">
-          <button className="cta-button">Commencer ma réservation</button>
+          <button className="cta-button">Suivant</button>
         </Link>
         <footer className="accueil-footer">
           Une Application Web développée par YoroBox
