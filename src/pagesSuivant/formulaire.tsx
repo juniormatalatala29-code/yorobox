@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
-import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/flatpickr.min.css"; // styles Flatpickr
 import "../styles/ReservationForm.css";
+
+// Flatpickr pour date et heure
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 
 const ReservationForm: React.FC = () => {
   const navigate = useNavigate();
@@ -40,8 +42,11 @@ const ReservationForm: React.FC = () => {
       await emailjs.send(serviceID, templateID, { ...formData }, publicKey);
 
       alert("✅ Votre réservation a été envoyée !");
+
+      // Redirection vers la page de confirmation avec les infos
       navigate("/finmessage", { state: { ...formData } });
 
+      // Reset du formulaire
       setFormData({
         nomComplet: "",
         commune: "",
@@ -138,31 +143,22 @@ const ReservationForm: React.FC = () => {
           required
         />
 
-        {/* Flatpickr pour la Date */}
+        {/* Date Picker */}
         <Flatpickr
           value={formData.date}
+          onChange={([date]) => setFormData({ ...formData, date: date.toISOString().split("T")[0] })}
           options={{ dateFormat: "Y-m-d" }}
-          onChange={(selectedDates) =>
-            setFormData({ ...formData, date: selectedDates[0]?.toISOString().split("T")[0] || "" })
-          }
-          className="flatpickr-input"
-          placeholder="Choisir la date"
+          placeholder="Date de réservation"
+          className="reservation-input"
         />
 
-        {/* Flatpickr pour l’Heure */}
+        {/* Time Picker */}
         <Flatpickr
           value={formData.heure}
-          options={{
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",
-            time_24hr: true,
-          }}
-          onChange={(selectedDates) =>
-            setFormData({ ...formData, heure: selectedDates[0]?.toTimeString().slice(0, 5) || "" })
-          }
-          className="flatpickr-input"
-          placeholder="Choisir l’heure"
+          onChange={([time]) => setFormData({ ...formData, heure: time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) })}
+          options={{ enableTime: true, noCalendar: true, dateFormat: "H:i" }}
+          placeholder="Heure de réservation"
+          className="reservation-input"
         />
 
         <button type="submit" className="reservation-button" disabled={loading}>
