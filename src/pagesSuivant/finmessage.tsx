@@ -17,7 +17,7 @@ const FinMessage: React.FC = () => {
 
   return (
     <div className="finmessage-root">
-      <h1>✅ Merci {reservation?.nomComplet} pour votre réservation !</h1>
+      <h1> Merci {reservation?.nomComplet} pour votre réservation !</h1>
 
       <p>Un message vous sera envoyé sur WhatsApp pour confirmer votre réservation.</p>
 
@@ -31,9 +31,8 @@ const FinMessage: React.FC = () => {
       </ul>
 
       <p>
-        <Link to="/Nouscontacter">Cliquez ici pour nous laisser votre avis et suggestion</Link>
+        <p>Avez vous besoin de nous contacter ou laisser un avis?</p>Cliquez<Link to="/Nouscontacter">ici</Link>
       </p>
-
       <Link to="/">
         <button className="cta-button">Retour à l'accueil</button>
       </Link>
