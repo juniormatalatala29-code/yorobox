@@ -2,7 +2,7 @@
   max-width: 600px;
   margin: 2rem auto;
   padding: 2rem;
-  background: #131212;
+  background-color: #131212;
   border-radius: 15px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
   font-family: "Arial", sans-serif;
@@ -13,6 +13,10 @@
   color: #fe8b10;
   margin-bottom: 2rem;
   font-size: 2rem;
+}
+
+body{ 
+background-color: #000;
 }
 
 .reservation-form input,
