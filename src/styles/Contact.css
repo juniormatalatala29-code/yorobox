@@ -6,7 +6,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: scroll;
 }
 
 /* Fond noir complet derrière l'image */
@@ -36,6 +35,10 @@
 .accueil-header, .bottom-section {
   position: relative;
   z-index: 1;
+}
+
+.accueil-header{
+  overflow: auto;
 }
 
 /* Header / titre */

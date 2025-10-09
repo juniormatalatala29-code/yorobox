@@ -10,6 +10,10 @@ html, body {
   width: 100%;
   overflow-x: hidden;
   margin: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 /* Conteneur principal */
@@ -21,6 +25,7 @@ html, body {
   justify-content: space-between;
   position: relative;
   overflow-x: hidden;
+  overflow: hidden;
   font-family: Arial, sans-serif;
   color: white;
 }
