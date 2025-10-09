@@ -169,6 +169,8 @@ header {
   flex-direction: column;
   align-items: center; /* centre horizontal */
   margin-bottom: 1rem;
+  /* ✅ Ajustement automatique pour iPhone (Safe Area en bas) */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
 }
 
 .cta-button {
