@@ -17,6 +17,7 @@
 
 body{ 
 background-color: #000;
+overflow-x: hidden;
 }
 
 .reservation-form input,
@@ -33,7 +34,7 @@ background-color: #000;
   color: #000;
 }
 
-.address-group {
+.message {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;

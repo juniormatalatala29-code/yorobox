@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/Contact.css";
 import bg from "../assets/image.jpg"; // ton image
 
-
-const Accueil: React.FC = () => {
+const Contact: React.FC = () => {
   return (
     <div className="accueil-root">
       {/* Fond noir complet */}
@@ -39,4 +38,4 @@ Parmi nos solutions phares, Yaka Mobile se distingue comme une application révo
   );
 };
 
-export default Accueil;
+export default Contact;

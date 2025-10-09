@@ -31,7 +31,7 @@ const FinMessage: React.FC = () => {
       </ul>
 
       <p>
-        <p>Avez vous besoin de nous contacter ou laisser un avis?</p>Cliquez<Link to="/Nouscontacter">ici</Link>
+        <p>Avez vous besoin de nous contacter ou laisser un avis?</p>Cliquez   <Link to="/Nouscontacter">ici</Link>
       </p>
       <Link to="/">
         <button className="cta-button">Retour à l'accueil</button>

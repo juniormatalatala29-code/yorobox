@@ -133,6 +133,7 @@ const ReservationForm: React.FC = () => {
           pattern="\d{9,10}"
           required
         />
+        <p className="subtitle">Veuillez indiquer le nombre de personnes</p>
         <input
           type="number"
           name="nbPersonnes"
@@ -142,7 +143,7 @@ const ReservationForm: React.FC = () => {
           min={1}
           required
         />
-
+        <p className="subtitle">Veuillez indiquer la date</p>
         {/* Date Picker */}
         <Flatpickr
           value={formData.date}
@@ -151,7 +152,7 @@ const ReservationForm: React.FC = () => {
           placeholder="Date de réservation"
           className="reservation-input"
         />
-
+        <p className="subtitle">Veuillez indiquer l'heure</p>
         {/* Time Picker */}
         <Flatpickr
           value={formData.heure}
