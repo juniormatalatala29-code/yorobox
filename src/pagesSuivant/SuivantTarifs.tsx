@@ -15,44 +15,43 @@ const images = [
 export default function Multimedia() {
   return (
     <section className="multimedia-section">
+      <div className="glass-card">
+        <h2 className="title">Nos Modèles Signature</h2>
+        <p className="subtitle">
+          Découvrez l’élégance, le style et la perfection de nos coiffures
+        </p>
 
-      <div className="content-wrapper">
-        {/* CARD */}
-        <div className="glass-card">
-          <h2 className="title">Nos Modèles Signature</h2>
-          <p className="subtitle">
-            Découvrez l’élégance, le style et la perfection de nos coiffures
-          </p>
-
-          <Swiper
-            modules={[Autoplay, Pagination, Navigation]}
-            autoplay={{ delay: 3500, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
-            navigation
-            loop
-            className="swiper-container"
-          >
-            {images.map((img, index) => (
-              <SwiperSlide key={index}>
-                <div className="image-wrapper">
-                  <img src={img} alt={`Modèle ${index}`} />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        {/* BOUTON SOUS LA CARD */}
-        <div className="bottom-section">
-          <Link to="/formulaire">
-            <button className="cta-button">Suivant</button>
-          </Link>
-          <footer className="Tarifs-footer">
-            Une Application Web développée par YoroBox
-          </footer>
-        </div>
+        <Swiper
+          modules={[Autoplay, Pagination, Navigation]}
+          autoplay={{
+            delay: 3500,
+            disableOnInteraction: false,
+          }}
+          pagination={{ clickable: true }}
+          navigation
+          loop
+          className="swiper-container"
+        >
+          {images.map((img, index) => (
+            <SwiperSlide key={index}>
+              <div className="image-wrapper">
+                <img src={img} alt={`Modèle ${index}`} />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      <header className="accueil-header">
+      </header>
+      <div className="bottom-section">
+        {/* Le bouton mène vers la route /suivanttarifs */}
+        <Link to="/formulaire">
+          <button className="cta-button">Suivant</button>
+        </Link>
+        <footer className="accueil-footer">
+          Une Application Web développée par YoroBox
+        </footer>
       </div>
-
+      </div>
     </section>
   );
 }
