@@ -13,7 +13,7 @@
 .contact-title {
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 900;
-  color: #FF8C00;
+  color: #d4af37;
   margin-bottom: 0.5rem;
 }
 
@@ -41,11 +41,11 @@
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  outline: 2px solid #FF8C00;
+  outline: 2px solid #d4af37;
 }
 
 .contact-button {
-  background-color: #FF8C00;
+  background-color:linear-gradient(90deg, #d4af37, #ffd700);
   color: #fff;
   border: none;
   padding: 1rem 2rem;
@@ -57,6 +57,6 @@
 }
 
 .contact-button:hover {
-  background-color: #e67600;
+  background-color: #d4af37;
   transform: scale(1.03);
 }

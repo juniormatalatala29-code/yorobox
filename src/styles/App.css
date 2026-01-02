@@ -91,7 +91,7 @@ header {
  /* font-family: 'Bebas Neue', sans-serif; code pour introduire une police */ 
   font-size: 4rem; /* ~96pt */
   font-weight: 800;/* ~96pt grandeur et epaiseur de yaka */
-  color: #Fe8b10;
+  color: #d4af37;
   margin-bottom: 0.25rem; /* petit espace */
 }
 
@@ -150,7 +150,7 @@ header {
 }
 
 .menu-buttons button {
-  background-color: #fe8b10;
+  background-color: #d4af37;
   color: white;
   border: none;
   padding: 0.75rem 1rem;
@@ -162,7 +162,7 @@ header {
 }
 
 .menu-buttons button:hover {
-  background-color: #fe8b10;
+  background-color: #d4af37;
   transform: translateX(5px);
 }
 
@@ -177,7 +177,7 @@ header {
 }
 
 .cta-button {
-  background-color: #fe8b10;
+  background-color: #d4af37;
   color: white;
   padding: 0.75rem 2rem;
   border-radius: 1rem;
@@ -190,7 +190,7 @@ header {
 }
 
 .cta-button:hover {
-  background-color: #fe8b10;
+  background-color:linear-gradient(90deg, #d4af37, #ffd700);
   transform: scale(1.05);
 }
 

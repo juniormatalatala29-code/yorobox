@@ -11,8 +11,8 @@ html, body, #root {
 }    
   
 :root {
-  --primary:#fe8b10;
-  --primary-hover:#e6790d;
+  --primary:#d4af37;
+  --primary-hover:#d4af37;
   --bg-dark:#000;
   --text-muted:#d1d1d1;
   --radius:12px;
@@ -41,7 +41,7 @@ button {
   z-index: 1000;
 
   /* Apparence */
-  background: #fe8b10;
+  background: #d4af37;
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -59,7 +59,7 @@ button {
 /* Hover / Active */
 .back-button:hover {
   transform: scale(1.05);
-  background: #ff9b2e;
+  background: #d4af37;
   box-shadow: 0 6px 14px rgba(0,0,0,0.25);
 }
 

@@ -62,7 +62,7 @@
 .logo {
   /* font-family: "Bebas Neue", sans-serif; */
   font-size: clamp(4rem, 11vw, 8.5rem); /* très large et responsive */
-  color: #fe8b10;
+  color: #d4af37;
   margin: 0;
   line-height: 0.95;
   margin-bottom: 0.12rem;
@@ -86,7 +86,7 @@
 }
 
 .ctas-button {
-  background: #Fe8b10;
+  background: #d4af37;
   color: #fff;
   border: none;
   padding: 0.90rem 9rem; /* grandeur bouton longeur et largeur*/
@@ -98,7 +98,7 @@
 }
 
 .cta-button:hover {
-  background: #fe8b10;
+  background: #d4af37;
   transform: scale(1.03);
 }
 

@@ -60,7 +60,7 @@
 .small-titles {
   /* font-family: "Honest", sans-serif; */
    font-size: clamp(2rem, 3.4vw, 3rem); /* très large et responsive */
-  color: #Fe8b10;
+  color: #d4af37;
   margin: 0;
   line-height: 0.95;
   margin-bottom: 0.12rem;
@@ -93,7 +93,7 @@
 }
 
 .cta-buttons {
-  background: #Fe8b10;
+  background: #d4af37;
   color: #fff;
   border: none;
   padding: 0.99rem 3rem;
@@ -106,7 +106,7 @@
 }
 
 .cta-button:hover {
-  background: #fe8b10;
+  background: #d4af37;
   transform: scale(1.03);
 }
 

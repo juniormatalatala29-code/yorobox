@@ -11,7 +11,7 @@
 }
 
 .finmessage-root h1 {
-  color: #fe8b10;
+  color: #d4af37;
   margin-bottom: 1rem;
 }
 
@@ -39,7 +39,7 @@
   border-radius: 25px;
   border: none;
   cursor: pointer;
-  background-color: #fe8b10;
+  background-color:linear-gradient(90deg, #d4af37, #ffd700);
   color: #fff;
   transition: transform 0.2s ease;
 }
@@ -49,7 +49,7 @@
 }
 
 .finmessage-root a {
-  color: #fe8b10;
+  color: #d4af37;
   text-decoration: underline;
   font-weight: 600;
 }

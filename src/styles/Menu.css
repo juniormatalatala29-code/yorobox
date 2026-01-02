@@ -60,7 +60,7 @@
   justify-content: center;     /* centre horizontalement */
   padding: 1rem 1.2rem;        /* plus d’espace pour le bouton */
   border-radius: 20px;         /* coins plus arrondis */
-  background: #fe8b10;
+  background: #d4af37;
   color: #fff;
   font-weight: 700;
   text-decoration: none;       /* enlève le soulignement */
@@ -68,6 +68,6 @@
 }
 
 .menu-links a:hover {
-  background: #fe8b10;
+  background: #d4af37;
   transform: translateX(6px);
 }

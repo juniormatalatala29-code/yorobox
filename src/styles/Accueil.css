@@ -68,7 +68,7 @@ html, body{
 .logo {
   /* font-family: "Bebas Neue", sans-serif; */
   font-size: clamp(4rem, 11vw, 8.5rem); /* très large et responsive */
-  color: #fe8b10;
+  color: #d4af37;
   margin: 0;
   line-height: 0.95;
   margin-bottom: 0.12rem;
@@ -92,7 +92,7 @@ html, body{
 }
 
 .cta-button {
-  background: #Fe8b10;
+  background: linear-gradient(90deg, #d4af37, #ffd700);
   color: #fff;
   border: none;
   padding: 0.99rem 3rem;
@@ -104,7 +104,7 @@ html, body{
 }
 
 .cta-button:hover {
-  background: #fe8b10;
+  background: #d4af37;
   transform: scale(1.03);
 }
 

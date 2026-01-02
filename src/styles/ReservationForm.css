@@ -10,7 +10,7 @@
 
 .reservation-title {
   text-align: center;
-  color: #fe8b10;
+  color: #d4af37;
   margin-bottom: 2rem;
   font-size: 2rem;
 }
@@ -46,7 +46,7 @@ overflow-x: hidden;
 
 .reservation-button {
   width: 100%;
-  background-color: #fe8b10;
+  background-color: #d4af37;
   color: #fff;
   font-weight: 700;
   padding: 1rem;
@@ -59,7 +59,7 @@ overflow-x: hidden;
 
 .reservation-button:hover {
   transform: scale(1.03);
-  background-color: #e6790d;
+  background-color: #d4af37;
 }
 
 @media screen and (max-width: 480px) {
