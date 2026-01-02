@@ -2,10 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "./Multimedia.css";
+import "swiper/css/bundle";
 
 const images = [
   "/images/image1.jpg",
