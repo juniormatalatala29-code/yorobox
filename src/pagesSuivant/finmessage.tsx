@@ -28,6 +28,7 @@ const FinMessage: React.FC = () => {
         <li>Nombre de personnes : {reservation?.nbPersonnes}</li>
         <li>Date : {reservation?.date}</li>
         <li>Heure : {reservation?.heure}</li>
+        <li>Prix : 14000FC</li>
       </ul>
 
       <p>
