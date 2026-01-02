@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import "../pages/Multimedia.css";
 
 import "swiper/css/bundle";
 
@@ -41,7 +42,6 @@ export default function Multimedia() {
         </Swiper>
       <header className="accueil-header">
       </header>
-
       <div className="bottom-section">
         {/* Le bouton mène vers la route /suivanttarifs */}
         <Link to="/formulaire">
