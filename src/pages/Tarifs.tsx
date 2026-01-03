@@ -45,7 +45,7 @@ export default function Multimedia() {
         {/* BOUTON SOUS LA CARD */}
         <div className="bottom-section">
           <Link to="/formulaire">
-            <button className="cta-button">Suivant</button>
+            <button className="cta-buttons">Suivant</button>
           </Link>
           <footer className="Tarifs-footer">
             Une Application Web développée par YoroBox
