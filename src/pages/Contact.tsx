@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Contact.css";
-import bg from "../assets/image.jpg"; // ton image
+import bg from "../assets/image.jpg"; // la partie image
 
 const Contact: React.FC = () => {
   return (

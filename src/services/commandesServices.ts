@@ -1,6 +1,6 @@
 // src/services/commandeService.ts
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../base/firebase"; // chemin vers ton firebase.ts
+import { db } from "../base/firebase"; // chemin vers le service firebase.ts
 
 export async function ajouterCommande(data: {
   nom: string;

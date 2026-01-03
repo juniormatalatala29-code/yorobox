@@ -21,9 +21,9 @@ const Contact: React.FC = () => {
     setLoading(true);
 
     try {
-      const serviceID = "serviceforme";       // ton Service ID EmailJS
-      const templateID = "template_lzq8cxr"; // ton Template ID EmailJS
-      const publicKey = "1bPAlD1HQQKCWO5uP"; // ta clé publique
+      const serviceID = "serviceforme";       // la partie id Service ID EmailJS
+      const templateID = "template_lzq8cxr"; // la partie Template ID EmailJS
+      const publicKey = "1bPAlD1HQQKCWO5uP"; // ma clé publique
 
       const result = await emailjs.send(serviceID, templateID, formData, publicKey);
 
