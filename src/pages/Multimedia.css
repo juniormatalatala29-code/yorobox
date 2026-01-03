@@ -1,23 +1,31 @@
-/* 🌌 Fond général */
+/* 🌌 Section principale */
 .multimedia-section {
   min-height: 100svh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: radial-gradient(circle at top, #1a1a1a, #000);
-  padding: 40px 20px;
+  padding: clamp(16px, 4vw, 32px);
   color: #fff;
-  position: relative;
 }
 
-/* 🧊 Carte Glass */
+/* 📦 Wrapper central */
+.content-wrapper {
+  width: 100%;
+  max-width: 480px; /* limite sur grands écrans */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.8rem, 3vw, 1.4rem);
+}
+
+/* 🧊 Card */
 .glass-card {
   width: 100%;
-  max-width: 420px;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(18px);
-  border-radius: 22px;
-  padding: 30px 20px 40px;
+  border-radius: clamp(18px, 4vw, 24px);
+  padding: clamp(18px, 4vw, 32px);
   border: 1px solid rgba(212, 175, 55, 0.35);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
 }
@@ -25,70 +33,60 @@
 /* 🏆 Titre */
 .title {
   text-align: center;
-  font-size: 1.6rem;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
   font-weight: 700;
   background: linear-gradient(90deg, #d4af37, #ffd700);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 8px;
+  margin-bottom: clamp(4px, 2vw, 8px);
 }
 
 /* ✨ Sous-titre */
 .subtitle {
   text-align: center;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 3vw, 0.95rem);
   opacity: 0.85;
-  margin-bottom: 20px;
+  margin-bottom: clamp(14px, 4vw, 22px);
 }
 
 /* 🎞 Swiper */
 .swiper-container {
-  border-radius: 18px;
+  border-radius: clamp(14px, 4vw, 18px);
   overflow: hidden;
 }
 
-/* 🖼 Image */
 .image-wrapper img {
   width: 100%;
-  height: 280px;
+  height: clamp(220px, 55vw, 300px);
   object-fit: cover;
 }
 
-/* 🔘 Pagination & nav */
-.swiper-pagination-bullet-active,
-.swiper-button-next,
-.swiper-button-prev {
-  color: #d4af37;
-}
-
-/* 🔽 SECTION BAS FIXE */
+/* 🔽 Bouton + footer */
 .bottom-section {
-  position: fixed;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
-  z-index: 10;
+  gap: 0.4rem;
 }
 
 /* 🔘 Bouton */
 .cta-button {
+  width: 100%;
+  max-width: 320px;
   background: linear-gradient(90deg, #d4af37, #ffd700);
   color: #fff;
   border: none;
-  padding: 1rem 3rem;
-  font-size: 1.1rem;
-  border-radius: 25px;
+  padding: clamp(0.85rem, 3vw, 1.1rem);
+  font-size: clamp(1rem, 3.5vw, 1.1rem);
+  border-radius: 999px;
   cursor: pointer;
   font-weight: 700;
-  min-width: 300px;
 }
 
 /* Footer */
 .Tarifs-footer {
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 3vw, 0.82rem);
   color: #d1d1d1;
+  text-align: center;
 }
