@@ -15,20 +15,13 @@ const Accueil: React.FC = () => {
       {/* Contenu par-dessus */}
       <header className="accueil-header">
         <div className="title-container">
-          <p className="small-title">Bienvenue sur</p>
-          <h1 className="logo">Yaka</h1>
-          <p className="subtitle">
-            Votre application de réservation
-            <br />
-            de coiffure en ligne
-          </p>
         </div>
       </header>
 
       <div className="bottom-section">
         {/* Le bouton mène vers la route /suivanttarifs */}
         <Link to="/SuivantTarifs">
-          <button className="cta-button">Commencer ma réservation</button>
+          <button className="cta-button">Voir nos Modèles Signature</button>
         </Link>
         <footer className="accueil-footer">
           Une Application Web développée par YoroBox

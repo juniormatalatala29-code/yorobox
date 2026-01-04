@@ -10,6 +10,8 @@ const images = [
   "/images/image2.jpg",
   "/images/image3.jpg",
   "/images/image4.jpg",
+  "/images/image5.jpg",
+  "/images/image6.jpg",
 ];
 
 export default function Multimedia() {
@@ -45,7 +47,7 @@ export default function Multimedia() {
         {/* BOUTON SOUS LA CARD */}
         <div className="bottom-section">
           <Link to="/formulaire">
-            <button className="cta-buttons">Suivant</button>
+            <button className="cta-buttons">Commencer ma réservation</button>
           </Link>
           <footer className="Tarifs-footer">
             Une Application Web développée par YoroBox

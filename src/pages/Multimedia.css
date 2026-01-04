@@ -19,7 +19,7 @@
   gap: clamp(0.8rem, 3vw, 1.4rem);
 }
 
-/* 🧊 Card */
+/* Card */
 .glass-card {
   width: 100%;
   background: rgba(255, 255, 255, 0.08);

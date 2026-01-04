@@ -24,7 +24,7 @@ const Menu: React.FC = () => {
 
         <nav className="menu-links">
           <Link to="/" onClick={toggle}>Accueil</Link>
-          <Link to="/tarifs" onClick={toggle}>Nos tarifs</Link>
+          <Link to="/tarifs" onClick={toggle}>Nos Modèles</Link>
           <Link to="/Nouscontacter" onClick={toggle}>Nous Contacter</Link>
           <Link to="/contact" onClick={toggle}>A propos de nous</Link>
         </nav>
