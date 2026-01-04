@@ -19,7 +19,7 @@ const FinMessage: React.FC = () => {
     <div className="finmessage-root">
       <h1> Merci {reservation?.nomComplet} pour votre réservation !</h1>
 
-      <p>Un message vous sera envoyé sur WhatsApp pour confirmer votre réservation.</p>
+      <p>Un message vous sera envoyé sur WhatsApp pour confirmer votre réservation et Avoir votre modéle de coiffure</p>
 
       <p>Voici les détails de votre réservation :</p>
       <ul>
@@ -28,7 +28,6 @@ const FinMessage: React.FC = () => {
         <li>Nombre de personnes : {reservation?.nbPersonnes}</li>
         <li>Date : {reservation?.date}</li>
         <li>Heure : {reservation?.heure}</li>
-        <li>Prix : 14000FC</li>
       </ul>
 
       <p>
