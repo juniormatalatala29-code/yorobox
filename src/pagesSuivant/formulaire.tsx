@@ -29,6 +29,18 @@ const ReservationForm: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const canGoNextStep = () => {
+    const { nomComplet, commune, quartier, avenue, email, whatsapp } = formData;
+    return (
+      nomComplet.trim() !== "" &&
+      commune.trim() !== "" &&
+      quartier.trim() !== "" &&
+      avenue.trim() !== "" &&
+      email.trim() !== "" &&
+      whatsapp.trim() !== ""
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -42,8 +54,8 @@ const ReservationForm: React.FC = () => {
       );
 
       navigate("/finmessage", { state: formData });
-    } catch (error) {
-      alert("Erreur lors de l'envoi");
+    } catch {
+      alert("❌ Erreur lors de l'envoi");
     } finally {
       setLoading(false);
     }
@@ -52,29 +64,85 @@ const ReservationForm: React.FC = () => {
   return (
     <div className="reservation-root">
       <h1 className="reservation-title">
-        {step === 1 ? "Informations personnelles" : "Détails de la réservation"}
+        {step === 1
+          ? "Informations personnelles"
+          : "Détails de la réservation"}
       </h1>
 
       <form className="reservation-form" onSubmit={handleSubmit}>
-
         {step === 1 && (
           <>
-            <input name="nomComplet" placeholder="Nom complet" value={formData.nomComplet} onChange={handleChange} required />
+            <input
+              name="nomComplet"
+              placeholder="Nom complet *"
+              value={formData.nomComplet}
+              onChange={handleChange}
+              required
+            />
 
-            <select name="commune" value={formData.commune} onChange={handleChange} required>
-              <option value="">Choisir la commune</option>
-              {["Limete","Masina","Ndjili","Lemba","Gombe","Ngaliema"].map(c =>
+            <select
+              name="commune"
+              value={formData.commune}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Choisir la commune *</option>
+              {["Limete","Masina","Ndjili","Lemba","Gombe","Ngaliema"].map(c => (
                 <option key={c} value={c}>{c}</option>
-              )}
+              ))}
             </select>
 
-            <input name="quartier" placeholder="Quartier" value={formData.quartier} onChange={handleChange} required />
-            <input name="avenue" placeholder="Avenue" value={formData.avenue} onChange={handleChange} required />
-            <input name="reference" placeholder="Référence (optionnel)" value={formData.reference} onChange={handleChange} />
-            <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-            <input name="whatsapp" placeholder="Numéro WhatsApp" value={formData.whatsapp} onChange={handleChange} required />
+            <input
+              name="quartier"
+              placeholder="Quartier *"
+              value={formData.quartier}
+              onChange={handleChange}
+              required
+            />
 
-            <button type="button" className="reservation-button" onClick={() => setStep(2)}>
+            <input
+              name="avenue"
+              placeholder="Avenue *"
+              value={formData.avenue}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              name="reference"
+              placeholder="Référence (optionnel)"
+              value={formData.reference}
+              onChange={handleChange}
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email *"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              name="whatsapp"
+              placeholder="Numéro WhatsApp *"
+              value={formData.whatsapp}
+              onChange={handleChange}
+              required
+            />
+
+            <button
+              type="button"
+              className="reservation-button"
+              onClick={() => {
+                if (!canGoNextStep()) {
+                  alert("⚠️ Veuillez remplir tous les champs obligatoires.");
+                  return;
+                }
+                setStep(2);
+              }}
+            >
               Suivant →
             </button>
           </>
@@ -82,37 +150,53 @@ const ReservationForm: React.FC = () => {
 
         {step === 2 && (
           <>
-            <p className="subtitles">Veuillez indiquer le nombre de personnes</p>
-            <input type="number" name="nbPersonnes" min={1} value={formData.nbPersonnes} onChange={handleChange} required />
-             <p className="subtitles">Veuillez indiquer la date</p>
+          <p className="subtitles">Veuillez indiquer le nombre de personnes</p>
+            <input
+              type="number"
+              name="nbPersonnes"
+              min={1}
+              value={formData.nbPersonnes}
+              onChange={handleChange}
+              required
+            />
+            <p className="subtitles">Veuillez indiquer la date</p>
             <Flatpickr
-              value={formData.date}
-              onChange={(_, dateStr) => setFormData({ ...formData, date: dateStr })}
               options={{ dateFormat: "Y-m-d" }}
-              placeholder="Date"
+              placeholder="Date *"
+              onChange={(_, dateStr) =>
+                setFormData({ ...formData, date: dateStr })
+              }
               className="reservation-input"
             />
-            <p className="subtitles">Veuillez indiquer l'heure</p>
+             <p className="subtitles">Veuillez indiquer l'heure</p>
             <Flatpickr
-              value={formData.heure}
-              onChange={(_, timeStr) => setFormData({ ...formData, heure: timeStr })}
               options={{ enableTime: true, noCalendar: true, dateFormat: "H:i" }}
-              placeholder="Heure"
+              placeholder="Heure *"
+              onChange={(_, timeStr) =>
+                setFormData({ ...formData, heure: timeStr })
+              }
               className="reservation-input"
             />
 
             <div className="step-buttons">
-              <button type="button" className="secondary-button" onClick={() => setStep(1)}>
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => setStep(1)}
+              >
                 ← Retour
               </button>
 
-              <button type="submit" className="reservation-button" disabled={loading}>
+              <button
+                type="submit"
+                className="reservation-button"
+                disabled={loading}
+              >
                 {loading ? "Envoi..." : "Envoyer"}
               </button>
             </div>
           </>
         )}
-
       </form>
     </div>
   );
