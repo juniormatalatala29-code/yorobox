@@ -82,8 +82,9 @@ const ReservationForm: React.FC = () => {
 
         {step === 2 && (
           <>
+            <p className="subtitles">Veuillez indiquer le nombre de personnes</p>
             <input type="number" name="nbPersonnes" min={1} value={formData.nbPersonnes} onChange={handleChange} required />
-
+             <p className="subtitles">Veuillez indiquer la date</p>
             <Flatpickr
               value={formData.date}
               onChange={(_, dateStr) => setFormData({ ...formData, date: dateStr })}
@@ -91,7 +92,7 @@ const ReservationForm: React.FC = () => {
               placeholder="Date"
               className="reservation-input"
             />
-
+            <p className="subtitles">Veuillez indiquer l'heure</p>
             <Flatpickr
               value={formData.heure}
               onChange={(_, timeStr) => setFormData({ ...formData, heure: timeStr })}

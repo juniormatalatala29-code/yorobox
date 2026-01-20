@@ -1,75 +1,97 @@
+/* 🌑 Fond global */
 body {
   background-color: #000;
   overflow-x: hidden;
 }
 
+/* 📦 Conteneur principal */
 .reservation-root {
   max-width: 520px;
-  margin: 2rem auto;
-  padding: 2rem;
+  margin: 4.5rem auto 2rem; /* ESPACE EN HAUT IMPORTANT */
+  padding: 2rem 1.8rem 2.2rem;
   background-color: #131212;
-  border-radius: 18px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.35);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
 }
 
+/* 🏷️ Titre */
 .reservation-title {
   text-align: center;
   color: #d4af37;
-  margin-bottom: 1.5rem;
-  font-size: clamp(1.6rem, 5vw, 2rem);
+  margin-bottom: 2rem; /* ESPACE ENTRE TITRE ET FORMULAIRE */
+  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  line-height: 1.3;
 }
 
+/* 📝 Champs */
 .reservation-form input,
 .reservation-form select,
 .flatpickr-input {
   width: 100%;
-  padding: 0.9rem;
-  margin-bottom: 1rem;
-  border-radius: 12px;
+  padding: 0.95rem 1rem;
+  margin-bottom: 1.1rem;
+  border-radius: 14px;
   border: none;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
+/* 🔘 Bouton principal */
 .reservation-button {
   width: 100%;
   background-color: #d4af37;
   color: #fff;
   padding: 1rem;
-  border-radius: 25px;
+  border-radius: 30px;
   font-weight: 700;
   font-size: 1.1rem;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .reservation-button:hover {
   transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(212,175,55,0.4);
 }
 
+/* 🔄 Boutons étape */
 .step-buttons {
   display: flex;
   gap: 1rem;
+  margin-top: 1.2rem; /* ESPACE AVEC LES INPUTS */
 }
 
+/* ↩ Bouton retour */
 .secondary-button {
   flex: 1;
   background: transparent;
   border: 1px solid #d4af37;
   color: #d4af37;
   padding: 1rem;
-  border-radius: 25px;
+  border-radius: 30px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .secondary-button:hover {
-  background: rgba(212,175,55,0.1);
+  background: rgba(212,175,55,0.12);
+  transform: scale(1.02);
 }
 
+/* 📱 Mobile */
 @media (max-width: 480px) {
   .reservation-root {
-    margin: 1rem;
-    padding: 1.2rem;
+    margin: 5.5rem 1rem 2rem; /* ÉVITE LE COLLAGE AVEC HEADER MOBILE */
+    padding: 1.6rem 1.2rem 2rem;
+  }
+
+  .reservation-title {
+    margin-bottom: 1.6rem;
+  }
+
+  .step-buttons {
+    flex-direction: column;
   }
 }
