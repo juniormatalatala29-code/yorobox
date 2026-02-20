@@ -50,6 +50,9 @@
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid gold; /* cercle doré autour */
+  padding: 1px; /* espace entre photo et cercle */
+  box-sizing: border-box;
 }
 
 /* --- Badges --- */
