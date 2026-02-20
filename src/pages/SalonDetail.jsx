@@ -8,6 +8,11 @@ import bella1 from "../assets/salons/bella-1.jpg";
 import bella3 from "../assets/salons/bella-3.jpg";
 import bella4 from "../assets/salons/bella-4.jpg";
 import Precious2 from "../assets/salons/Precious2.jpg";
+import Precious3 from "../assets/salons/Precious3.jpg";
+import Precious4 from "../assets/salons/Precious4.jpg";
+import Precious5 from "../assets/salons/Precious5.jpg";
+import Precious7 from "../assets/salons/Precious7.jpg";
+import Precious8 from "../assets/salons/Precious8.jpg";
 
 
 // Exemple de données salons
@@ -28,7 +33,7 @@ const salons = [
       { produit: "Shampoing", price: "5$" },
       { produit: "Crème coiffante", price: "7$" },
     ],
-    gallery: [bella1, bella2, bella3],
+    gallery: [Precious3, Precious4, Precious5, Precious7, Precious8],
   },
   {
     id: 2,
