@@ -1,63 +1,143 @@
+/* --- Container Liste --- */
+
 .salons-container {
-  background: #000;
   min-height: 100vh;
+  background: black;
   padding: 20px;
-  color: white;
+  color: gold;
 }
 
 .salons-title {
-  color: gold;
-  margin-bottom: 25px;
-  font-size: 22px;
   text-align: center;
+  margin-bottom: 20px;
 }
+
+/* --- Cards Liste --- */
 
 .salon-card {
   display: flex;
-  align-items: center;
-  background: #111;
+  gap: 15px;
+  border-radius: 12px;
   padding: 15px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  border: 1px solid gold;
-  cursor: pointer;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: gold;
   transition: 0.3s;
 }
 
-.salon-card:hover {
+.salon-card.normal {
+  border: 1px solid gold;
+  background: #111;
+}
+
+.salon-card.vip {
+  border: 2px solid gold;
+  background: linear-gradient(135deg, #111, #1a1a1a);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.salon-card.premium {
+  border: 3px solid gold;
+  background: linear-gradient(135deg, #000, #1a1a1a);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
   transform: scale(1.02);
 }
 
+/* --- Image Liste --- */
+
 .salon-image {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
+  width: 110px;
+  height: 110px;
+  border-radius: 12px;
   object-fit: cover;
-  margin-right: 15px;
-  border: 2px solid gold;
 }
 
-.salon-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* --- Badges --- */
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: inline-block;
 }
 
-.premium-badge {
+.badge.normal {
+  background: #333;
+  color: gold;
+}
+
+.badge.vip {
+  background: black;
+  border: 1px solid gold;
+  color: gold;
+}
+
+.badge.premium {
   background: gold;
   color: black;
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 20px;
+}
+
+/* --- Detail Page --- */
+
+.detail-container {
+  min-height: 100vh;
+  background: black;
+  padding: 20px;
+  color: gold;
+  text-align: center;
+}
+
+.detail-container.vip {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+.detail-container.premium {
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+}
+
+.banner {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+/* --- Boutons --- */
+
+.order-btn {
+  background: gold;
+  color: black;
+  padding: 12px;
+  border-radius: 8px;
+  width: 90%;
+  margin: 10px auto;
+  border: none;
+  cursor: pointer;
   font-weight: bold;
 }
 
-.salon-city {
-  color: #bbb;
-  font-size: 13px;
+.whatsapp-btn {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  background: #25D366;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
 }
 
-.salon-desc {
-  font-size: 14px;
-  margin-top: 3px;
+.review-btn {
+  background: transparent;
+  border: 1px solid gold;
+  color: gold;
+  padding: 12px;
+  width: 90%;
+  margin: 10px auto;
+  border-radius: 8px;
+  cursor: pointer;
 }

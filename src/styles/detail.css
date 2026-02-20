@@ -46,3 +46,18 @@ h3 {
   border-radius: 10px;
   border: 1px solid gold;
 }
+
+.detail-container.normal {
+  background: white;
+  color: black;
+}
+
+.detail-container.premium {
+  background: black;
+  color: white;
+}
+
+.detail-container.vip {
+  background: black;
+  color: gold;
+}

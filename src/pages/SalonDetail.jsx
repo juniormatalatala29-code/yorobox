@@ -1,60 +1,90 @@
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { salons } from "../data/salons";
-import "../styles/detail.css";
+import "../styles/salons.css";
 
-export default function SalonDetail() {
+import bella2 from "../assets/salons/bella-2.jpg";
+
+const salons = [
+  {
+    id: 1,
+    name: "Salon Premium Gold",
+    plan: "premium",
+    bannerImage: bella2,
+    bio: "Salon premium avec une offre complète et innovante.",
+  },
+  {
+    id: 2,
+    name: "Salon VIP Élégance",
+    plan: "vip",
+    bannerImage: bella2,
+    bio: "Salon VIP avec prestations haut de gamme.",
+  },
+  {
+    id: 3,
+    name: "Salon Standard Beauté",
+    plan: "normal",
+    bannerImage: bella2,
+    bio: "Salon standard simple.",
+  },
+];
+
+const SalonDetail = () => {
   const { id } = useParams();
-  const salon = salons.find((s) => s.id === id);
+  const salon = salons.find((s) => s.id === Number(id));
+  const [rating, setRating] = useState(0);
 
-  if (!salon) return <div>Salon introuvable</div>;
+  if (!salon) return <h2>Salon introuvable</h2>;
 
   return (
-    <div className="detail-container">
-      <img src={salon.bannerImage} className="banner" />
+    <div className={`detail-container ${salon.plan}`}>
+      <img src={salon.bannerImage} className="banner" alt="salon" />
 
-      <div className="detail-content">
-        <h1>{salon.name}</h1>
-        <p className="city">{salon.city}</p>
+      <h1>{salon.name}</h1>
 
-        <section>
-          <h3>À propos</h3>
-          <p>{salon.bio}</p>
-        </section>
+      <span className={`badge ${salon.plan}`}>
+        {salon.plan.toUpperCase()}
+      </span>
 
-        <section>
-          <h3>Horaires</h3>
-          <p>{salon.horaires}</p>
-        </section>
-
-        <section>
-          <h3>Tarifs</h3>
-          {salon.tarifs.map((t, i) => (
-            <div key={i} className="row">
-              <span>{t.service}</span>
-              <span>{t.price}</span>
-            </div>
-          ))}
-        </section>
-
-        <section>
-          <h3>Catalogue</h3>
-          {salon.catalogue.map((c, i) => (
-            <div key={i} className="row">
-              <span>{c.produit}</span>
-              <span>{c.price}</span>
-            </div>
-          ))}
-        </section>
-
-        <section>
-          <h3>Galerie</h3>
-          <div className="gallery">
-            {salon.gallery.map((img, i) => (
-              <img key={i} src={img} />
-            ))}
-          </div>
-        </section>
+      {/* ⭐ étoiles */}
+      <div className="stars">
+        {[1, 2, 3, 4, 5, 6].map((star) => (
+          <span
+            key={star}
+            onClick={() =>
+              salon.plan === "premium" && setRating(star)
+            }
+            style={{
+              cursor: salon.plan === "premium" ? "pointer" : "default",
+              color: star <= rating ? "gold" : "#555",
+              fontSize: "24px",
+              marginRight: "4px",
+            }}
+          >
+            ★
+          </span>
+        ))}
       </div>
+
+      <p className="bio">{salon.bio}</p>
+
+      <button className="order-btn">Commander</button>
+
+      {(salon.plan === "premium" || salon.plan === "vip") && (
+        <a
+          href="https://wa.me/243811298054"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="whatsapp-btn"
+        >
+          Écrire sur WhatsApp
+        </a>
+      )}
+
+      {salon.plan === "premium" && (
+        <button className="review-btn">Nous laisser un avis</button>
+      )}
     </div>
   );
-}
+};
+
+export default SalonDetail;

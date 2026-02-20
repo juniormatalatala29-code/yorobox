@@ -10,17 +10,14 @@ import SuivantTarifs from "./pagesSuivant/SuivantTarifs";
 import Formulaire from "./pagesSuivant/formulaire";
 import Finmessage from "./pagesSuivant/finmessage";
 
-// 🔥 NOUVELLES PAGES
+// 👉 nouveaux
 import Salons from "./pages/Salons";
 import SalonDetail from "./pages/SalonDetail";
 
-import "./styles/global.css";
-
-const App: React.FC = () => {
+const AppContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Pages où on cache le menu et on affiche bouton retour
   const hideMenuOn = ["/SuivantTarifs", "/formulaire", "/finmessage"];
 
   return (
@@ -34,21 +31,20 @@ const App: React.FC = () => {
       )}
 
       <Routes>
-        {/* Pages existantes */}
         <Route path="/" element={<Accueil />} />
+        <Route path="/salons" element={<Salons />} />
+        <Route path="/salon/:id" element={<SalonDetail />} />
+
         <Route path="/tarifs" element={<Tarifs />} />
         <Route path="/Nouscontacter" element={<Nouscontacter />} />
         <Route path="/contact" element={<Contact />} />
+
         <Route path="/suivanttarifs" element={<SuivantTarifs />} />
         <Route path="/formulaire" element={<Formulaire />} />
         <Route path="/finmessage" element={<Finmessage />} />
-
-        {/* 🔥 NOUVELLES ROUTES SALONS */}
-        <Route path="/salons" element={<Salons />} />
-        <Route path="/salon/:id" element={<SalonDetail />} />
       </Routes>
     </>
   );
 };
 
-export default App;
+export default AppContent;
