@@ -1,28 +1,29 @@
 /* --- Container Liste --- */
-
 .salons-container {
   min-height: 10vh;
   background: black;
-  padding: 20px;
+  padding: 10px; /* moins de padding pour compacter */
   color: gold;
 }
 
 .salons-title {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* plus compact */
+  font-size: 18px;
 }
 
 /* --- Cards Liste --- */
-
 .salon-card {
   display: flex;
-  gap: 15px;
-  border-radius: 15px;
-  padding: 9px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 12px;
+  border-radius: 12px;
+  padding: 8px; /* réduit padding */
+  margin-bottom: 12px; /* espace plus serré */
   text-decoration: none;
   color: gold;
   transition: 0.3s;
+  font-size: 14px;
 }
 
 .salon-card.normal {
@@ -33,33 +34,31 @@
 .salon-card.vip {
   border: 2px solid gold;
   background: linear-gradient(135deg, #111, #1a1a1a);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
 }
 
 .salon-card.premium {
-  border: 3px solid gold;
+  border: 2px solid gold;
   background: linear-gradient(135deg, #000, #1a1a1a);
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  transform: scale(1);
 }
 
 /* --- Image Liste --- */
-
 .salon-image {
-  width: 110px;
-  height: 110px;
-  border-radius: 100px;
+  width: 60px;  /* réduit taille image */
+  height: 60px;
+  border-radius: 50%;
   object-fit: cover;
 }
 
 /* --- Badges --- */
-
 .badge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   display: inline-block;
 }
 
@@ -80,40 +79,45 @@
 }
 
 /* --- Detail Page --- */
-
 .detail-container {
   min-height: 100vh;
   background: black;
-  padding: 20px;
+  padding: 15px; /* légèrement réduit */
   color: gold;
   text-align: center;
+  font-size: 14px; /* plus compact pour tout */
 }
 
 .detail-container.vip {
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
 }
 
 .detail-container.premium {
-  box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.4);
 }
 
 .banner {
   width: 100%;
-  height: 230px;
+  height: 180px; /* réduit pour compacter */
   object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 15px;
+  border-radius: 10px;
+  margin-bottom: 12px;
 }
 
 /* --- Boutons --- */
+.order-btn,
+.whatsapp-btn,
+.review-btn {
+  padding: 10px;
+  width: 80%; /* légèrement plus petit */
+  margin: 8px auto;
+  border-radius: 6px;
+  font-size: 14px;
+}
 
 .order-btn {
   background: gold;
   color: black;
-  padding: 12px;
-  border-radius: 8px;
-  width: 90%;
-  margin: 10px auto;
   border: none;
   cursor: pointer;
   font-weight: bold;
@@ -121,12 +125,8 @@
 
 .whatsapp-btn {
   display: block;
-  width: 90%;
-  margin: 10px auto;
   background: #25D366;
   color: white;
-  padding: 12px;
-  border-radius: 8px;
   text-decoration: none;
   text-align: center;
 }
@@ -135,9 +135,14 @@
   background: transparent;
   border: 1px solid gold;
   color: gold;
-  padding: 12px;
-  width: 90%;
-  margin: 10px auto;
-  border-radius: 8px;
   cursor: pointer;
+}
+
+/* --- Stars --- */
+.stars {
+  margin: 6px 0;
+}
+.stars span {
+  font-size: 20px; /* un peu plus petit */
+  margin-right: 3px;
 }
