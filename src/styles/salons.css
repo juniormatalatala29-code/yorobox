@@ -1,0 +1,63 @@
+.salons-container {
+  background: #000;
+  min-height: 100vh;
+  padding: 20px;
+  color: white;
+}
+
+.salons-title {
+  color: gold;
+  margin-bottom: 25px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.salon-card {
+  display: flex;
+  align-items: center;
+  background: #111;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  border: 1px solid gold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.salon-card:hover {
+  transform: scale(1.02);
+}
+
+.salon-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 2px solid gold;
+}
+
+.salon-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.premium-badge {
+  background: gold;
+  color: black;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.salon-city {
+  color: #bbb;
+  font-size: 13px;
+}
+
+.salon-desc {
+  font-size: 14px;
+  margin-top: 3px;
+}

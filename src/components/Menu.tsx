@@ -11,7 +11,7 @@ const Menu: React.FC = () => {
       {/* Overlay */}
       {open && <div className="menu-overlay" onClick={toggle} />}
 
-      {/* Bouton hamburger (fixé top-right) */}
+      {/* Bouton hamburger */}
       <button className="hamburger" onClick={toggle} aria-label="Ouvrir le menu">
         &#9776;
       </button>
@@ -23,7 +23,12 @@ const Menu: React.FC = () => {
         </button>
 
         <nav className="menu-links">
+          {/* On garde Accueil */}
           <Link to="/" onClick={toggle}>Accueil</Link>
+
+          {/* 🔥 NOUVEAU BOUTON */}
+          <Link to="/salons" onClick={toggle}>Salons</Link>
+
           <Link to="/tarifs" onClick={toggle}>Nos Modèles</Link>
           <Link to="/Nouscontacter" onClick={toggle}>Nous Contacter</Link>
           <Link to="/contact" onClick={toggle}>A propos de nous</Link>
