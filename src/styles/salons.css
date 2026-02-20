@@ -14,11 +14,12 @@
 
 /* --- Cards Liste --- */
 .salon-card {
+  position: relative; /* permet au badge d'être positionné par rapport à la card */
   display: flex;
   align-items: center;
   gap: 12px;
   border-radius: 12px;
-  padding: 8px; /* réduit padding */
+  padding: 8px 12px; /* espace pour le badge */
   margin-bottom: 12px; /* espace plus serré */
   text-decoration: none;
   color: gold;
@@ -55,16 +56,19 @@
   box-sizing: border-box;
 }
 
-/* --- Badges --- */
+/* --- Badges positionnés au coin droit --- */
 .badge {
+  position: absolute; /* positionné au-dessus du contenu */
+  top: 8px;          /* distance depuis le haut de la card */
+  right: 8px;        /* distance depuis le côté droit */
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 10px;
   font-weight: bold;
-  margin-bottom: 4px;
   display: inline-block;
 }
 
+/* Styles des badges */
 .badge.normal {
   background: #333;
   color: gold;

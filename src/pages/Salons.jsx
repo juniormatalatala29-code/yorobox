@@ -8,10 +8,10 @@ import salonImg from "../assets/salons/bella-1.jpg";
 const salons = [
   {
     id: 1,
-    name: "Salon Premium Gold",
+    name: "Bella Beauty",
     plan: "premium",
     bannerImage: salonImg,
-    bio: "Un salon premium avec un service exceptionnel et une expérience VIP totale.",
+    bio: "Spécialiste looks et tresses haute de gramme.",
   },
   {
     id: 2,
