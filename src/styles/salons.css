@@ -8,8 +8,8 @@
 
 .salons-title {
   text-align: center;
-  margin-bottom: 10px; /* plus compact */
-  font-size: 18px;
+  margin-bottom: 50px; /* plus compact */
+  font-size: 40px;
 }
 
 /* --- Cards Liste --- */
@@ -22,7 +22,7 @@
   padding: 8px 12px; /* espace pour le badge */
   margin-bottom: 12px; /* espace plus serré */
   text-decoration: none;
-  color: gold;
+  color: rgb(254, 254, 249);
   transition: 0.3s;
   font-size: 14px;
 }
