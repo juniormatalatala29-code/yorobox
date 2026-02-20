@@ -2,29 +2,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/salons.css";
 
+
 // Même image pour les 3 salons, à remplacer par tes images locales
-import salonImg from "../assets/salons/bella-1.jpg";
+import bella4 from "../assets/salons/bella-4.jpg";
+import bella5 from "../assets/salons/bella-5.jpg";
+import bella6 from "../assets/salons/bella-6.jpg";
 
 const salons = [
   {
     id: 1,
     name: "Bella Beauty",
     plan: "premium",
-    bannerImage: salonImg,
+    bannerImage: bella4,
     bio: "Spécialiste looks et tresses haute de gramme.",
   },
   {
     id: 2,
     name: "Salon VIP Élégance",
     plan: "vip",
-    bannerImage: salonImg,
+    bannerImage: bella5,
     bio: "Un salon VIP raffiné avec un service haut de gamme.",
   },
   {
     id: 3,
     name: "Salon Standard Beauté",
     plan: "normal",
-    bannerImage: salonImg,
+    bannerImage: bella6,
     bio: "Un salon standard proposant des services basiques.",
   },
 ];

@@ -4,6 +4,9 @@ import "../styles/salons.css";
 import "../styles/detail.css";
 
 import bella2 from "../assets/salons/bella-2.jpg";
+import bella1 from "../assets/salons/bella-1.jpg";
+import bella3 from "../assets/salons/bella-3.jpg";
+import bella4 from "../assets/salons/bella-4.jpg";
 
 // Exemple de données salons
 const salons = [
@@ -23,7 +26,7 @@ const salons = [
       { produit: "Shampoing", price: "5$" },
       { produit: "Crème coiffante", price: "7$" },
     ],
-    gallery: [bella2, bella2, bella2],
+    gallery: [bella1, bella2, bella3],
   },
   {
     id: 2,
@@ -56,7 +59,7 @@ const salons = [
       { service: "Coloration", price: "15$" },
     ],
     catalogue: [{ produit: "Shampoing", price: "4$" }],
-    gallery: [bella2],
+    gallery: [bella1,bella2,bella3,bella4],
   },
 ];
 

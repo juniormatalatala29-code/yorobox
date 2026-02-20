@@ -46,3 +46,39 @@ h3 {
   border-radius: 10px;
   border: 1px solid gold;
 }
+
+/* Nom, ville, bio */
+.salon-info .salon-name { color: yellow; margin: 0; font-weight: bold; font-size: 16px; }
+.salon-info .salon-city { color: gray; margin: 2px 0 4px 0; font-size: 12px; }
+.salon-info .salon-bio { color: gold; margin: 0; font-size: 14px; }
+
+/* Catalogue */
+.catalogue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.catalogue-item {
+  background: #111;
+  border: 1px solid gold;
+  border-radius: 6px;
+  padding: 4px;
+  width: 80px;
+  text-align: center;
+}
+
+.catalogue-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.catalogue-info span {
+  display: block;
+  font-size: 11px;
+  color: gold;
+}
