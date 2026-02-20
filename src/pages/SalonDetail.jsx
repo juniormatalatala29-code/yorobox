@@ -7,15 +7,17 @@ import bella2 from "../assets/salons/bella-2.jpg";
 import bella1 from "../assets/salons/bella-1.jpg";
 import bella3 from "../assets/salons/bella-3.jpg";
 import bella4 from "../assets/salons/bella-4.jpg";
+import bellap6 from "../assets/salons/bellap6.jpg";
+
 
 // Exemple de données salons
 const salons = [
   {
     id: 1,
-    name: "Salon Premium Gold",
+    name: "Precious Touch",
     plan: "premium",
-    bannerImage: bella2,
-    bio: "Salon premium avec une offre complète et innovante.",
+    bannerImage: bellap6,
+    bio: "Maquillage, Coiffures, Décorations.",
     city: "Kinshasa",
     horaires: "Lun - Sam: 9h - 19h",
     tarifs: [

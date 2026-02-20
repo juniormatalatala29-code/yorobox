@@ -7,14 +7,15 @@ import "../styles/salons.css";
 import bella4 from "../assets/salons/bella-4.jpg";
 import bella5 from "../assets/salons/bella-5.jpg";
 import bella6 from "../assets/salons/bella-6.jpg";
+import bellap from "../assets/salons/bellap7.jpg";
 
 const salons = [
   {
     id: 1,
-    name: "Bella Beauty",
+    name: "Precious Touch",
     plan: "premium",
-    bannerImage: bella4,
-    bio: "Spécialiste looks et tresses haute de gramme.",
+    bannerImage: bellap,
+    bio: "Maquillage, Coiffures, Décorations.",
   },
   {
     id: 2,
