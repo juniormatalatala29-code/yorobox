@@ -7,7 +7,7 @@ import bella2 from "../assets/salons/bella-2.jpg";
 import bella1 from "../assets/salons/bella-1.jpg";
 import bella3 from "../assets/salons/bella-3.jpg";
 import bella4 from "../assets/salons/bella-4.jpg";
-import bellap6 from "../assets/salons/bellap6.jpg";
+import Precious2 from "../assets/salons/Precious2.jpg";
 
 
 // Exemple de données salons
@@ -16,7 +16,7 @@ const salons = [
     id: 1,
     name: "Precious Touch",
     plan: "premium",
-    bannerImage: bellap6,
+    bannerImage: Precious2,
     bio: "Maquillage, Coiffures, Décorations.",
     city: "Kinshasa",
     horaires: "Lun - Sam: 9h - 19h",

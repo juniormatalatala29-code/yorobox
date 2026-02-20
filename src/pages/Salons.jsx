@@ -7,14 +7,14 @@ import "../styles/salons.css";
 import bella4 from "../assets/salons/bella-4.jpg";
 import bella5 from "../assets/salons/bella-5.jpg";
 import bella6 from "../assets/salons/bella-6.jpg";
-import bellap from "../assets/salons/bellap7.jpg";
+import Precious1 from "../assets/salons/Precious1.jpg";
 
 const salons = [
   {
     id: 1,
     name: "Precious Touch",
     plan: "premium",
-    bannerImage: bellap,
+    bannerImage: Precious1,
     bio: "Maquillage, Coiffures, Décorations.",
   },
   {
