@@ -1,5 +1,5 @@
 // src/firebase/firebase.ts
-import { initializeApp } from "firebase/app";
+/*import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore"; // <-- ajout Firestore
 
 const firebaseConfig = {
@@ -16,4 +16,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Initialiser Firestore et l’exporter pour ton projet
-export const db = getFirestore(app);
+export const db = getFirestore(app);^
+
+/*  BOUTON  */

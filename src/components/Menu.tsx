@@ -8,30 +8,26 @@ const Menu: React.FC = () => {
 
   return (
     <>
-      {/* Overlay */}
       {open && <div className="menu-overlay" onClick={toggle} />}
 
-      {/* Bouton hamburger */}
-      <button className="hamburger" onClick={toggle} aria-label="Ouvrir le menu">
+      <button className="hamburger" onClick={toggle}>
         &#9776;
       </button>
 
-      {/* Menu coulissant */}
-      <aside className={`side-menu ${open ? "open" : ""}`} aria-hidden={!open}>
-        <button className="close" onClick={toggle} aria-label="Fermer le menu">
+      <aside className={`side-menu ${open ? "open" : ""}`}>
+        <button className="close" onClick={toggle}>
           &times;
         </button>
 
         <nav className="menu-links">
-          {/* On garde Accueil */}
           <Link to="/" onClick={toggle}>Accueil</Link>
-
-          {/* 🔥 NOUVEAU BOUTON */}
           <Link to="/salons" onClick={toggle}>Salons</Link>
-
           <Link to="/tarifs" onClick={toggle}>Nos Modèles</Link>
-          <Link to="/Nouscontacter" onClick={toggle}>Nous Contacter</Link>
+          <Link to="/nouscontacter" onClick={toggle}>Nous Contacter</Link>
           <Link to="/contact" onClick={toggle}>A propos de nous</Link>
+
+          {/* 🔐 Nouveau bouton */}
+          <Link to="/login" onClick={toggle}>Se connecter</Link>
         </nav>
       </aside>
     </>

@@ -51,7 +51,7 @@ export default function Multimedia() {
           </Swiper>
         </div>
 
-        {/* BOUTON SOUS LA CARD */}
+        {/* BOUTON SOUS LA CARD */ }
         <div className="bottom-section">
           <Link to="/formulaire">
             <button className="cta-button">Commencer ma réservation</button>
