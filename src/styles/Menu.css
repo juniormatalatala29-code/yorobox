@@ -20,10 +20,11 @@
   z-index: 55;
 }
 
+/* ✅ FIX: menu totalement hors écran quand fermé */
 .side-menu {
   position: fixed;
   top: 0;
-  right: -60%;
+  right: -100%;          /* ✅ avant: -60% -> laissait une partie visible */
   width: 60%;
   max-width: 420px;
   height: 100%;
@@ -36,6 +37,7 @@
   box-shadow: -8px 0 30px rgba(0,0,0,0.6);
 }
 
+/* Ouvert */
 .side-menu.open { right: 0; }
 
 .side-menu .close {
@@ -55,15 +57,15 @@
 }
 
 .menu-links a {
-  display: flex;               /* flex permet de centrer facilement */
-  align-items: center;         /* centre verticalement */
-  justify-content: center;     /* centre horizontalement */
-  padding: 1rem 1.2rem;        /* plus d’espace pour le bouton */
-  border-radius: 20px;         /* coins plus arrondis */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.2rem;
+  border-radius: 20px;
   background: #d4af37;
   color: #fff;
   font-weight: 700;
-  text-decoration: none;       /* enlève le soulignement */
+  text-decoration: none;
   transition: transform 0.15s, background 0.15s;
 }
 
@@ -72,6 +74,7 @@
   transform: translateX(6px);
 }
 
+/* Garde tes styles auth */
 .auth-btn {
   margin-top: 20px;
   padding: 10px;
@@ -90,4 +93,10 @@
   border: 1px solid gold;
   border-radius: 8px;
   cursor: pointer;
+}
+
+@media (max-width: 420px) {
+  .side-menu {
+    width: 78%;
+  }
 }

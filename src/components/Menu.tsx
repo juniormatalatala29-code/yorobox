@@ -25,7 +25,6 @@ const Menu: React.FC = () => {
           <Link to="/tarifs" onClick={toggle}>Nos Modèles</Link>
           <Link to="/nouscontacter" onClick={toggle}>Nous Contacter</Link>
           <Link to="/contact" onClick={toggle}>A propos de nous</Link>
-
           {/* 🔐 Nouveau bouton */}
           <Link to="/login" onClick={toggle}>Se connecter</Link>
         </nav>

@@ -1,84 +1,83 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/auth.css";
 
-const Register = () => {
+const Register: React.FC = () => {
   const navigate = useNavigate();
+  const [salonName, setSalonName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState({
-    salonName: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleRegister = async (e: any) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = cred.user.uid;
 
-      const user = userCredential.user;
-
-      await setDoc(doc(db, "salons", user.uid), {
-        uid: user.uid,
-        salonName: form.salonName,
-        email: form.email,
+      await setDoc(doc(db, "salons", uid), {
+        uid,
+        salonName,
+        email,
         subscriptionType: "standard",
         subscriptionEndDate: null,
         createdAt: serverTimestamp(),
       });
 
       navigate("/dashboard");
-    } catch (error: any) {
-      alert(error.message);
+    } catch (err: any) {
+      alert(err?.message || "Erreur d'inscription");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-page">
       <div className="auth-card">
-        <h2>Créer un Compte</h2>
+        <h1 className="auth-title">Créer un compte</h1>
+        <p className="auth-subtitle">Créez votre salon en quelques secondes</p>
 
-        <form onSubmit={handleRegister}>
+        <form className="auth-form" onSubmit={handleRegister}>
           <input
-            name="salonName"
+            className="auth-input"
+            type="text"
             placeholder="Nom du salon"
-            onChange={handleChange}
+            value={salonName}
+            onChange={(e) => setSalonName(e.target.value)}
             required
           />
+
           <input
-            name="email"
+            className="auth-input"
             type="email"
             placeholder="Adresse email"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Mot de passe"
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
-          <button type="submit">Créer mon compte</button>
+          <input
+            className="auth-input"
+            type="password"
+            placeholder="Mot de passe"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button className="auth-btn" type="submit" disabled={loading}>
+            {loading ? "Création..." : "Créer mon compte"}
+          </button>
         </form>
 
         <div className="auth-link">
-          <p>
-            Déjà un compte ? <Link to="/login">Se connecter</Link>
-          </p>
+          Déjà un compte ? <Link to="/login">Se connecter</Link>
         </div>
       </div>
     </div>
