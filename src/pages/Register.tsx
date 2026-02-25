@@ -20,14 +20,17 @@ const Register: React.FC = () => {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       const uid = cred.user.uid;
 
-      await setDoc(doc(db, "salons", uid), {
-        uid,
-        salonName,
-        email,
-        subscriptionType: "standard",
-        subscriptionEndDate: null,
-        createdAt: serverTimestamp(),
-      });
+  await setDoc(doc(db, "salons", uid), {
+    uid,
+    salonName,
+    email,
+    subscriptionType: "standard",
+    subscriptionEndDate: null,
+    status: "active",
+    bio: "",
+    bannerImage: "",
+    createdAt: serverTimestamp(),
+  });
 
       navigate("/dashboard");
     } catch (err: any) {
