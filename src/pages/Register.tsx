@@ -14,29 +14,37 @@ const Register: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
+    console.log("▶️ Register start");
 
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       const uid = cred.user.uid;
 
-  await setDoc(doc(db, "salons", uid), {
-    uid,
-    salonName,
-    email,
-    subscriptionType: "standard",
-    subscriptionEndDate: null,
-    status: "active",
-    bio: "",
-    bannerImage: "",
-    createdAt: serverTimestamp(),
-  });
+      console.log("✅ Auth created:", uid);
 
+      await setDoc(doc(db, "salons", uid), {
+        uid,
+        salonName,
+        email,
+        bio: "Salon de coiffure & beauté.",
+        subscriptionType: "standard",
+        subscriptionEndDate: null,
+        status: "active", // IMPORTANT pour que Salons.tsx l'affiche
+        createdAt: serverTimestamp(),
+      });
+
+      console.log("✅ Firestore salon doc created");
       navigate("/dashboard");
     } catch (err: any) {
+      console.error("❌ Register error:", err);
       alert(err?.message || "Erreur d'inscription");
+      // (option) si Auth a créé l'user mais Firestore a échoué, tu pourras corriger ensuite
     } finally {
       setLoading(false);
+      console.log("⏹️ Register end");
     }
   };
 

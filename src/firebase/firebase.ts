@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAarV0xmTGKlOPSJY2FN7Whm2wpdoJ2iCI",
-  authDomain: "salon-yaka.firebaseapp.com",
-  projectId: "salon-yaka",
-  storageBucket: "salon-yaka.firebasestorage.app",
-  messagingSenderId: "383669346121",
-  appId: "1:383669346121:web:cf1115536c5822279bc498",
+  apiKey: "AIzaSyD_80d-sav0XevQfA-H-eXubqLUxZEHWJI",
+  authDomain: "yaka-mobile.firebaseapp.com",
+  projectId: "yaka-mobile",
+  storageBucket: "yaka-mobile.firebasestorage.app",
+  messagingSenderId: "570123276349",
+  appId: "1:570123276349:web:1719caac1a728e88c71a54"
 };
 
 const app = initializeApp(firebaseConfig);

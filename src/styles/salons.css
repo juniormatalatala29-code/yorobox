@@ -1,156 +1,153 @@
-/* --- Container Liste --- */
-.salons-container {
-  min-height: 10vh;
-  background: black;
-  padding: 10px; /* moins de padding pour compacter */
-  color: gold;
+.salons-page{
+  min-height: 100vh;
+  background: #000;
+  padding: 24px 14px 60px;
 }
 
-.salons-title {
-  text-align: center;
-  margin-bottom: 50px; /* plus compact */
-  font-size: 30px;
-}
-
-/* --- Cards Liste --- */
-.salon-card {
-  position: relative; /* permet au badge d'être positionné par rapport à la card */
+.salons-topbar{
+  max-width: 980px;
+  margin: 0 auto 18px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-radius: 12px;
-  padding: 8px 12px; /* espace pour le badge */
-  margin-bottom: 12px; /* espace plus serré */
+  justify-content: space-between;
+}
+
+.salons-title{
+  margin: 18px 0 10px;
+  text-align: center;
+  color: #d4af37;
+  letter-spacing: 2px;
+  font-weight: 900;
+  font-size: 44px;
+}
+
+.salons-menu{
+  color: #fff;
+  font-size: 34px;
+  line-height: 1;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.35);
+  background: rgba(255,255,255,.04);
+}
+
+.salons-loading,
+.salons-empty{
+  color: rgba(255,255,255,.85);
+  text-align: center;
+  margin-top: 30px;
+  font-size: 18px;
+}
+
+.salons-list{
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.salon-card2{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 18px;
+  border-radius: 26px;
   text-decoration: none;
-  color: rgb(254, 254, 249);
-  transition: 0.3s;
-  font-size: 14px;
-}
-
-.salon-card.normal {
-  border: 1px solid gold;
   background: #111;
+  border: 2px solid rgba(212,175,55,.85);
+  color: #fff;
+  transition: transform .08s ease, background .12s ease;
 }
 
-.salon-card.vip {
-  border: 2px solid gold;
-  background: linear-gradient(135deg, #111, #1a1a1a);
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+.salon-card2:hover{
+  transform: translateY(-1px);
+  background: #141414;
 }
 
-.salon-card.premium {
-  border: 2px solid gold;
-  background: linear-gradient(135deg, #000, #1a1a1a);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-  transform: scale(1);
-}
+.salon-left{ flex: 0 0 auto; }
 
-/* --- Image Liste --- */
-.salon-image {
-  width: 60px;  /* réduit taille image */
-  height: 60px;
+.salon-avatar{
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid gold; /* cercle doré autour */
-  padding: 1px; /* espace entre photo et cercle */
-  box-sizing: border-box;
+  border: 4px solid #d4af37;
+  box-shadow: 0 0 0 6px rgba(212,175,55,.10);
 }
 
-/* --- Badges positionnés au coin droit --- */
-.badge {
-  position: absolute; /* positionné au-dessus du contenu */
-  top: 8px;          /* distance depuis le haut de la card */
-  right: 8px;        /* distance depuis le côté droit */
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 10px;
-  font-weight: bold;
-  display: inline-block;
+.salon-avatar.placeholder{
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 4px solid #d4af37;
+  background: #222;
+  box-shadow: 0 0 0 6px rgba(212,175,55,.10);
 }
 
-/* Styles des badges */
-.badge.normal {
-  background: #333;
-  color: gold;
+.salon-middle{ flex: 1; min-width: 0; }
+
+.salon-name{
+  font-size: 38px;
+  font-weight: 900;
+  color: #d4af37;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.badge.vip {
-  background: black;
-  border: 1px solid gold;
-  color: gold;
+.salon-city{
+  font-size: 22px;
+  opacity: .9;
+  margin-bottom: 8px;
 }
 
-.badge.premium {
-  background: gold;
-  color: black;
+.salon-bio{
+  font-size: 22px;
+  opacity: .92;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* --- Detail Page --- */
-.detail-container {
-  min-height: 100vh;
-  background: black;
-  padding: 15px; /* légèrement réduit */
-  color: gold;
-  text-align: center;
-  font-size: 14px; /* plus compact pour tout */
+.salon-right{
+  flex: 0 0 auto;
+  align-self: flex-start;
+  padding-top: 6px;
 }
 
-.detail-container.vip {
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-}
-
-.detail-container.premium {
-  box-shadow: 0 0 35px rgba(255, 215, 0, 0.4);
-}
-
-.banner {
-  width: 100%;
-  height: 180px; /* réduit pour compacter */
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 12px;
-}
-
-/* --- Boutons --- */
-.order-btn,
-.whatsapp-btn,
-.review-btn {
-  padding: 10px;
-  width: 80%; /* légèrement plus petit */
-  margin: 8px auto;
-  border-radius: 6px;
+.plan-badge{
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 900;
+  letter-spacing: .6px;
   font-size: 14px;
+  border: 1px solid rgba(0,0,0,.15);
 }
 
-.order-btn {
-  background: gold;
-  color: black;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
+.plan-badge.vip{
+  background: #d4af37;
+  color: #000;
 }
 
-.whatsapp-btn {
-  display: block;
-  background: #25D366;
-  color: white;
-  text-decoration: none;
-  text-align: center;
+.plan-badge.premium{
+  background: #ffcf40;
+  color: #000;
 }
 
-.review-btn {
-  background: transparent;
-  border: 1px solid gold;
-  color: gold;
-  cursor: pointer;
+.plan-badge.standard{
+  background: #2b2b2b;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.16);
 }
 
-/* --- Stars --- */
-.stars {
-  margin: 6px 0;
+/* responsive */
+@media (max-width: 600px){
+  .salons-title{ font-size: 32px; }
+  .salon-name{ font-size: 26px; }
+  .salon-city, .salon-bio{ font-size: 18px; }
+  .salon-avatar{ width: 76px; height: 76px; }
 }
-.stars span {
-  font-size: 20px; /* un peu plus petit */
-  margin-right: 3px;
-}
-

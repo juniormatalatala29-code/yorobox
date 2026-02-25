@@ -1,22 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/salons.css";
 
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 
-/**
- * Modèle salon dans Firestore (collection: "salons")
- * docId = uid
- */
+type SubscriptionType = "standard" | "vip" | "premium";
+
 type SalonDoc = {
   salonName?: string;
   email?: string;
-  subscriptionType?: "standard" | "vip" | "premium";
   bio?: string;
-  bannerImage?: string; // URL ou chemin (si plus tard)
+  city?: string;
+
+  // images (optionnel)
+  profileImage?: string; // photo ronde (recommandé)
+  bannerImage?: string; // fallback
+
   status?: "active" | "pending" | "disabled";
+  subscriptionType?: SubscriptionType;
+
   createdAt?: any;
+  uid?: string;
+};
+
+const PLAN_ORDER: Record<SubscriptionType, number> = {
+  premium: 0,
+  vip: 1,
+  standard: 2,
 };
 
 const Salons: React.FC = () => {
@@ -25,8 +36,10 @@ const Salons: React.FC = () => {
 
   useEffect(() => {
     const load = async () => {
+      setLoading(true);
+
       try {
-        // ✅ Afficher seulement les salons actifs (recommandé)
+        // ✅ salons actifs
         const q = query(
           collection(db, "salons"),
           where("status", "==", "active"),
@@ -34,7 +47,6 @@ const Salons: React.FC = () => {
         );
 
         const snap = await getDocs(q);
-
         const data = snap.docs.map((d) => ({
           id: d.id,
           ...(d.data() as SalonDoc),
@@ -42,7 +54,7 @@ const Salons: React.FC = () => {
 
         setSalons(data);
       } catch (e) {
-        // Si tu n'as pas encore "status" ou "createdAt" indexé, on fallback simple
+        // ✅ fallback si index manquant (ou createdAt absent)
         const snap = await getDocs(collection(db, "salons"));
         const data = snap.docs.map((d) => ({
           id: d.id,
@@ -57,55 +69,69 @@ const Salons: React.FC = () => {
     load();
   }, []);
 
+  const sorted = useMemo(() => {
+    return [...salons].sort((a, b) => {
+      const pa = (a.subscriptionType || "standard") as SubscriptionType;
+      const pb = (b.subscriptionType || "standard") as SubscriptionType;
+      return PLAN_ORDER[pa] - PLAN_ORDER[pb];
+    });
+  }, [salons]);
+
   if (loading) {
     return (
-      <div className="salons-container">
-        <h1 className="salons-title">Liste des Salons</h1>
-        <p style={{ opacity: 0.8, textAlign: "center" }}>Chargement...</p>
+      <div className="salons-page">
+        <h1 className="salons-title">SALONS PREMIUM</h1>
+        <p className="salons-loading">Chargement...</p>
       </div>
     );
   }
 
   return (
-    <div className="salons-container">
-      <h1 className="salons-title">Liste des Salons</h1>
+    <div className="salons-page">
+      <div className="salons-topbar">
+        <h1 className="salons-title">SALONS PREMIUM</h1>
+        <div className="salons-menu">☰</div>
+      </div>
 
-      {salons.length === 0 && (
-        <p style={{ opacity: 0.85, textAlign: "center" }}>
-          Aucun salon disponible pour le moment.
-        </p>
+      {sorted.length === 0 && (
+        <p className="salons-empty">Aucun salon disponible pour le moment.</p>
       )}
 
-      {salons.map((salon) => {
-        const plan = salon.subscriptionType || "standard";
-        const name = salon.salonName || "Salon";
-        const bio = salon.bio || "Salon de coiffure & beauté.";
+      <div className="salons-list">
+        {sorted.map((salon) => {
+          const plan = (salon.subscriptionType || "standard") as SubscriptionType;
+          const name = salon.salonName || "Salon";
+          const city = salon.city || "Kinshasa"; // ← si tu n'as pas city, on met un fallback
+          const bio = salon.bio || "Salon de coiffure & beauté.";
+          const avatar = salon.profileImage || salon.bannerImage || "";
 
-        return (
-          <Link
-            key={salon.id}
-            to={`/salon/${salon.id}`}
-            className={`salon-card ${plan}`}
-          >
-            {/* ✅ Image : si pas d'image, on affiche un bloc placeholder */}
-            {salon.bannerImage ? (
-              <img src={salon.bannerImage} className="salon-image" alt={name} />
-            ) : (
-              <div className="salon-image placeholder" />
-            )}
+          return (
+            <Link
+              key={salon.id}
+              to={`/salon/${salon.id}`}
+              className={`salon-card2 ${plan}`}
+            >
+              <div className="salon-left">
+                {avatar ? (
+                  <img className="salon-avatar" src={avatar} alt={name} />
+                ) : (
+                  <div className="salon-avatar placeholder" />
+                )}
+              </div>
 
-            <div className="salon-info">
-              <h2>{name}</h2>
+              <div className="salon-middle">
+                <div className="salon-name">{name}</div>
+                <div className="salon-city">{city}</div>
+                <div className="salon-bio">{bio}</div>
+              </div>
 
-              <span className={`badge ${plan}`}>
-                {plan.toUpperCase()}
-              </span>
-
-              <p>{bio}</p>
-            </div>
-          </Link>
-        );
-      })}
+              <div className="salon-right">
+                <span className={`plan-badge ${plan}`}>{plan.toUpperCase()}</span>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 };
