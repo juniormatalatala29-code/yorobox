@@ -25,16 +25,19 @@ const Register: React.FC = () => {
 
       console.log("✅ Auth created:", uid);
 
-      await setDoc(doc(db, "salons", uid), {
-        uid,
-        salonName,
-        email,
-        bio: "Salon de coiffure & beauté.",
-        subscriptionType: "standard",
-        subscriptionEndDate: null,
-        status: "active", // IMPORTANT pour que Salons.tsx l'affiche
-        createdAt: serverTimestamp(),
-      });
+    await setDoc(doc(db, "salons", uid), {
+      uid,
+      salonName,
+      email,
+      subscriptionType: "standard",
+      subscriptionEndDate: null,
+ 
+      status: "active",                // ✅ IMPORTANT
+      bio: "Salon de coiffure & beauté.", // optionnel (valeur par défaut)
+      city: "Kinshasa",                 // optionnel (valeur par défaut)
+ 
+      createdAt: serverTimestamp(),     // ✅ IMPORTANT
+  });
 
       console.log("✅ Firestore salon doc created");
       navigate("/dashboard");

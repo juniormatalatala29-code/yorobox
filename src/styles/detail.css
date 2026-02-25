@@ -1,84 +1,376 @@
-.detail-container {
-  background: black;
-  color: white;
+/* =========================
+   SALON DETAIL (Noir / Or)
+   Stable + Responsive (mobile first)
+   Compatible avec ton TSX actuel
+   ========================= */
+ 
+:root{
+  --bg: #000;
+  --card: rgba(255,255,255,.06);
+  --gold: #d4af37;
+  --gold2: #ffd700;
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.74);
+  --border: rgba(212,175,55,.18);
+  --border2: rgba(212,175,55,.28);
+  --shadow: 0 18px 40px rgba(0,0,0,.62);
+}
+ 
+/* reset safe */
+*{ box-sizing: border-box; }
+img{ max-width: 100%; display:block; }
+button{ font-family: inherit; }
+ 
+.detail-page{
   min-height: 100vh;
-}
-
-.banner {
   width: 100%;
-  height: 250px;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  padding-bottom: 28px;
+}
+ 
+/* ===== Banner ===== */
+.detail-bannerWrap{
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+ 
+.detail-banner{
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  filter: saturate(1.06) contrast(1.06);
 }
-
-.detail-content {
-  padding: 20px;
+ 
+/* Placeholder EXACT (comme dans ton TSX) */
+.detail-bannerPlaceholder{
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(212,175,55,.25), transparent 55%),
+    #111;
 }
-
-h1 {
-  color: gold;
+ 
+/* Shade (comme dans ton TSX) */
+.detail-bannerShade{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.10) 0%,
+    rgba(0,0,0,.45) 55%,
+    rgba(0,0,0,.90) 100%
+  );
 }
-
-section {
-  margin-top: 25px;
-}
-
-h3 {
-  color: gold;
-  margin-bottom: 10px;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  border-bottom: 1px solid #333;
-  padding-bottom: 5px;
-}
-
-.gallery {
+ 
+/* ===== Overlay header ===== */
+.detail-headerOverlay{
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px; /* ✅ on arrête le négatif qui casse sur certains écrans */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: 78px 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+ 
+.detail-avatarWrap{
+  width: 78px;
+  height: 78px;
+}
+ 
+.detail-avatar{
+  width: 78px;
+  height: 78px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid rgba(212,175,55,.95);
+  background: #111;
+}
+ 
+/* Placeholder EXACT (comme dans ton TSX) */
+.detail-avatarPlaceholder{
+  width: 78px;
+  height: 78px;
+  border-radius: 999px;
+  border: 2px solid rgba(212,175,55,.75);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(212,175,55,.18), transparent 55%),
+    #111;
+}
+ 
+.detail-headerText{
+  min-width: 0;
+}
+ 
+.detail-title{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: .2px;
+}
+ 
+.detail-city{
+  margin: 6px 0 0;
+  font-size: 13px;
+  opacity: .88;
+}
+ 
+/* badge */
+.detail-badge{
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .9px;
+  color: var(--gold);
+  border: 1px solid rgba(212,175,55,.55);
+  background: rgba(0,0,0,.40);
+  white-space: nowrap;
+}
+ 
+/* Optionnel : différencier les plans */
+.detail-page.premium .detail-badge{ border-color: rgba(255,215,0,.65); }
+.detail-page.vip .detail-badge{ border-color: rgba(212,175,55,.55); }
+.detail-page.standard .detail-badge{ opacity: .9; }
+ 
+/* ===== Card ===== */
+.detail-card{
+  width: min(920px, calc(100% - 24px));
+  margin: 14px auto 0; /* ✅ plus de gros décalage */
+  padding: 16px 14px;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+ 
+/* Sur mobile : on donne de l’air sous la bannière */
+.detail-card{
+  transform: translateY(-10px);
+}
+@media (max-width: 420px){
+  .detail-card{ transform: translateY(-8px); }
+}
+ 
+.detail-loading{
+  text-align: center;
+  margin: 0;
+  opacity: .9;
+}
+ 
+/* ===== Stars ===== */
+.detail-stars{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 2px 0 14px;
+}
+ 
+.star{
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 22px;
+  line-height: 1;
+  padding: 0;
+  cursor: default;
+  opacity: .95;
+}
+ 
+.star.active{ color: var(--gold2); }
+ 
+.star.clickable{
+  cursor: pointer;
+  transform: translateY(0);
+}
+.star.clickable:hover{ transform: translateY(-1px); }
+ 
+.star.locked{
+  opacity: .65;
+}
+ 
+/* évite le style "disabled gris moche" sur certains navigateurs */
+.star:disabled{
+  opacity: .70;
+}
+ 
+/* ===== Sections ===== */
+.detail-section{
+  margin-top: 14px;
+}
+ 
+.detail-section h3{
+  margin: 0 0 8px;
+  font-size: 14px;
+  letter-spacing: .9px;
+  font-weight: 900;
+  color: rgba(255,255,255,.92);
+}
+ 
+.detail-text{
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  opacity: .92;
+}
+ 
+.detail-muted{
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  opacity: .75;
+}
+ 
+/* ===== Rows (tarifs & catalogue) ===== */
+.detail-rows{
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
-
-.gallery img {
-  width: 100%;
-  border-radius: 10px;
-  border: 1px solid gold;
-}
-
-/* Nom, ville, bio */
-.salon-info .salon-name { color: yellow; margin: 0; font-weight: bold; font-size: 16px; }
-.salon-info .salon-city { color: gray; margin: 2px 0 4px 0; font-size: 12px; }
-.salon-info .salon-bio { color: gold; margin: 0; font-size: 14px; }
-
-/* Catalogue */
-.catalogue {
+ 
+.detail-row{
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.26);
+  border: 1px solid rgba(212,175,55,.14);
 }
-
-.catalogue-item {
+ 
+.row-left{
+  font-weight: 700;
+  opacity: .92;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+ 
+.row-right{
+  color: var(--gold);
+  font-weight: 900;
+  white-space: nowrap;
+}
+ 
+/* ===== Galerie ===== */
+.detail-gallery{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ✅ mieux sur mobile */
+  gap: 10px;
+}
+ 
+.detail-gallery img{
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.18);
   background: #111;
-  border: 1px solid gold;
-  border-radius: 6px;
-  padding: 4px;
-  width: 80px;
+}
+ 
+/* ===== Actions ===== */
+.detail-actions{
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+ 
+.btn-primary,
+.btn-secondary,
+.btn-tertiary{
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 13px 14px;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
   text-align: center;
 }
-
-.catalogue-img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 2px;
+ 
+.btn-primary{
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  color: #000;
 }
-
-.catalogue-info span {
-  display: block;
-  font-size: 11px;
-  color: gold;
+ 
+.btn-secondary{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #19c463; /* WhatsApp vibe */
+  color: #001b0c;
+  text-decoration: none;
+}
+ 
+.btn-tertiary{
+  background: rgba(255,255,255,.07);
+  color: #fff;
+  border: 1px solid rgba(212,175,55,.22);
+}
+ 
+/* ===== Responsive ===== */
+@media (min-width: 700px){
+  .detail-bannerWrap{ height: 290px; }
+ 
+  .detail-headerOverlay{
+    left: 24px;
+    right: 24px;
+    bottom: 18px;
+    grid-template-columns: 92px 1fr auto;
+  }
+ 
+  .detail-avatarWrap,
+  .detail-avatar,
+  .detail-avatarPlaceholder{
+    width: 92px;
+    height: 92px;
+  }
+ 
+  .detail-title{ font-size: 26px; }
+ 
+  .detail-card{
+    padding: 18px 18px;
+    transform: translateY(-16px);
+  }
+ 
+  .detail-gallery{
+    grid-template-columns: repeat(3, 1fr);
+  }
+ 
+  .detail-gallery img{ height: 130px; }
+ 
+  .detail-actions{
+    grid-template-columns: 1fr 1fr;
+  }
+  .btn-tertiary{
+    grid-column: 1 / -1;
+  }
+}
+ 
+/* Très petits écrans : évite les écrasements */
+@media (max-width: 360px){
+  .detail-headerOverlay{
+    grid-template-columns: 72px 1fr;
+    grid-auto-rows: auto;
+  }
+  .detail-badge{
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 6px;
+  }
 }

@@ -1,60 +1,48 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/salons.css";
-
+ 
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-
+ 
 type SubscriptionType = "standard" | "vip" | "premium";
-
+ 
 type SalonDoc = {
   salonName?: string;
-  email?: string;
   bio?: string;
   city?: string;
-
-  // images (optionnel)
-  profileImage?: string; // photo ronde (recommandé)
-  bannerImage?: string; // fallback
-
+ 
+  profileImage?: string;
+  bannerImage?: string;
+ 
   status?: "active" | "pending" | "disabled";
   subscriptionType?: SubscriptionType;
-
   createdAt?: any;
-  uid?: string;
 };
-
-const PLAN_ORDER: Record<SubscriptionType, number> = {
-  premium: 0,
-  vip: 1,
-  standard: 2,
-};
-
+ 
 const Salons: React.FC = () => {
   const [salons, setSalons] = useState<Array<{ id: string } & SalonDoc>>([]);
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     const load = async () => {
       setLoading(true);
-
       try {
-        // ✅ salons actifs
+        // ✅ salons actifs seulement
         const q = query(
           collection(db, "salons"),
           where("status", "==", "active"),
           orderBy("createdAt", "desc")
         );
-
+ 
         const snap = await getDocs(q);
         const data = snap.docs.map((d) => ({
           id: d.id,
           ...(d.data() as SalonDoc),
         }));
-
         setSalons(data);
       } catch (e) {
-        // ✅ fallback si index manquant (ou createdAt absent)
+        // fallback si index / champs manquants
         const snap = await getDocs(collection(db, "salons"));
         const data = snap.docs.map((d) => ({
           id: d.id,
@@ -65,75 +53,98 @@ const Salons: React.FC = () => {
         setLoading(false);
       }
     };
-
+ 
     load();
   }, []);
-
-  const sorted = useMemo(() => {
-    return [...salons].sort((a, b) => {
-      const pa = (a.subscriptionType || "standard") as SubscriptionType;
-      const pb = (b.subscriptionType || "standard") as SubscriptionType;
-      return PLAN_ORDER[pa] - PLAN_ORDER[pb];
+ 
+  const grouped = useMemo(() => {
+    const premium: Array<{ id: string } & SalonDoc> = [];
+    const vip: Array<{ id: string } & SalonDoc> = [];
+    const standard: Array<{ id: string } & SalonDoc> = [];
+ 
+    salons.forEach((s) => {
+      const plan = (s.subscriptionType || "standard") as SubscriptionType;
+      if (plan === "premium") premium.push(s);
+      else if (plan === "vip") vip.push(s);
+      else standard.push(s);
     });
+ 
+    return { premium, vip, standard };
   }, [salons]);
-
-  if (loading) {
+ 
+  const renderGroup = (
+    title: string,
+    plan: SubscriptionType,
+    items: Array<{ id: string } & SalonDoc>
+  ) => {
+    if (items.length === 0) return null;
+ 
     return (
-      <div className="salons-page">
-        <h1 className="salons-title">SALONS PREMIUM</h1>
-        <p className="salons-loading">Chargement...</p>
-      </div>
+      <section className="salons-group">
+        <div className="salons-groupHeader">
+          <h2 className="salons-groupTitle">{title}</h2>
+          <span className={`salons-groupPill ${plan}`}>{items.length}</span>
+        </div>
+ 
+        <div className="salons-list">
+          {items.map((salon) => {
+            const name = salon.salonName || "Salon";
+            const city = salon.city || "Kinshasa";
+            const bio = salon.bio || "Salon de coiffure & beauté.";
+            const avatar = salon.profileImage || salon.bannerImage || "";
+ 
+            return (
+              <Link
+                key={salon.id}
+                to={`/salon/${salon.id}`}
+                className={`salon-item ${plan}`}
+              >
+                <div className="salon-avatarWrap">
+                  {avatar ? (
+                    <img className="salon-avatar" src={avatar} alt={name} />
+                  ) : (
+                    <div className="salon-avatar salon-avatar--placeholder" />
+                  )}
+                </div>
+ 
+                <div className="salon-info">
+                  <div className="salon-row1">
+                    <div className="salon-name">{name}</div>
+                    <span className={`salon-badge ${plan}`}>
+                      {plan.toUpperCase()}
+                    </span>
+                  </div>
+ 
+                  <div className="salon-city">{city}</div>
+                  <div className="salon-bio">{bio}</div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
     );
-  }
-
+  };
+ 
   return (
     <div className="salons-page">
-      <div className="salons-topbar">
-        <h1 className="salons-title">SALONS PREMIUM</h1>
-        <div className="salons-menu">☰</div>
-      </div>
-
-      {sorted.length === 0 && (
+      <h1 className="salons-title">LISTE DES SALONS</h1>
+ 
+      {loading && <p className="salons-loading">Chargement...</p>}
+ 
+      {!loading && salons.length === 0 && (
         <p className="salons-empty">Aucun salon disponible pour le moment.</p>
       )}
-
-      <div className="salons-list">
-        {sorted.map((salon) => {
-          const plan = (salon.subscriptionType || "standard") as SubscriptionType;
-          const name = salon.salonName || "Salon";
-          const city = salon.city || "Kinshasa"; // ← si tu n'as pas city, on met un fallback
-          const bio = salon.bio || "Salon de coiffure & beauté.";
-          const avatar = salon.profileImage || salon.bannerImage || "";
-
-          return (
-            <Link
-              key={salon.id}
-              to={`/salon/${salon.id}`}
-              className={`salon-card2 ${plan}`}
-            >
-              <div className="salon-left">
-                {avatar ? (
-                  <img className="salon-avatar" src={avatar} alt={name} />
-                ) : (
-                  <div className="salon-avatar placeholder" />
-                )}
-              </div>
-
-              <div className="salon-middle">
-                <div className="salon-name">{name}</div>
-                <div className="salon-city">{city}</div>
-                <div className="salon-bio">{bio}</div>
-              </div>
-
-              <div className="salon-right">
-                <span className={`plan-badge ${plan}`}>{plan.toUpperCase()}</span>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+ 
+      {!loading && salons.length > 0 && (
+        <>
+          {renderGroup("SALONS PREMIUM", "premium", grouped.premium)}
+          {renderGroup("SALONS VIP", "vip", grouped.vip)}
+          {renderGroup("SALONS STANDARD", "standard", grouped.standard)}
+        </>
+      )}
     </div>
   );
 };
-
+ 
 export default Salons;
