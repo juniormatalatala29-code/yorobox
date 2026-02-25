@@ -1,15 +1,6 @@
-
+/* ✅ Reset de base (safe) */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body, #root { 
-  height: 100%; 
-  width: 100%;
-  overflow-x: hidden; /* Pas de scrolle orizontal*/
-  font-family: Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #fff;
-}    
-  
+
 :root {
   --primary:#d4af37;
   --primary-hover:#d4af37;
@@ -19,76 +10,66 @@ html, body, #root {
   --shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
+/* ✅ Base globale (ne casse pas tes cards) */
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden; /* pas de scroll horizontal */
+  font-family: Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+  background: transparent;
+}
 
+/* Root prend toute la hauteur disponible */
+#root {
+  min-height: 100%;
+}
+
+/* Liens & boutons (safe) */
 a { color: inherit; text-decoration: none; }
-button { 
+
+button {
   font-family: inherit;
   cursor: pointer;
-  border: none;
-  outline: none;
 }
 
-.back-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  
-  /* Positionnement */
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 1000;
-
-  /* Apparence */
-  background: #d4af37;
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 0.3rem 2rem;
-  font-size: 1.2rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-
-  /* Texte et icône centrés */
-  text-align: center;
-}
-
-/* Hover / Active */
-.back-button:hover {
-  transform: scale(1.05);
-  background: #d4af37;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-}
-
-.back-button:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-/* ✅ Ajustement automatique pour iPhone (Safe Area en bas) */
+/* ✅ Ajustement iPhone Safe Area uniquement (ne casse rien ailleurs) */
 .bottom-section {
   padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
 }
 
-/* ✅ Bouton Retour global (visible sur toutes pages) */
+/* ✅ BOUTON RETOUR (1 seule version - style doré comme avant) */
 .back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+
   position: fixed;
-  top: 14px;
-  left: 14px;
+  top: 15px;
+  left: 15px;
   z-index: 9999;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(212, 175, 55, 0.55);
-  background: rgba(0, 0, 0, 0.65);
-  color: #d4af37;
+
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 0.55rem 1.3rem;
+  font-size: 1.05rem;
   font-weight: 800;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .back-button:hover {
-  background: rgba(212, 175, 55, 0.14);
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.28);
+}
+
+.back-button:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.20);
 }
