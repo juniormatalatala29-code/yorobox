@@ -13,8 +13,8 @@ import SalonDetail from "./pages/SalonDetail";
 
 // Pages suivantes
 import SuivantTarifs from "./pagesSuivant/SuivantTarifs";
-import Formulaire from "./pagesSuivant/Formulaire";
-import Finmessage from "./pagesSuivant/Finmessage";
+import Formulaire from "./pagesSuivant/formulaire";
+import Finmessage from "./pagesSuivant/finmessage";
 
 // Auth
 import Register from "./pages/Register";
@@ -23,7 +23,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppContent = () => {
-  const location = useLocation();
+  const location = useLocation();;
   const navigate = useNavigate();
 
   const hideMenuOn = [
