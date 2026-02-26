@@ -25,7 +25,7 @@ type SalonDoc = {
   whatsapp?: string;
 };
  
-const DEFAULT_WHATSAPP = "243811298054";
+const DEFAULT_WHATSAPP = "243977506981";
  
 const SalonDetail: React.FC = () => {
   const { id } = useParams();
@@ -127,7 +127,7 @@ const SalonDetail: React.FC = () => {
       <div className="detail-card">
         {/* ⭐ étoiles visibles, mais cliquables uniquement premium */}
         <div className="detail-stars">
-          {[1, 2, 3, 4, 5, 6].map((star) => (
+          {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
               type="button"
