@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
  
 import "./styles/global.css";
  
@@ -28,6 +28,7 @@ import Login from "./pages/Login";
  
 // Dashboard
 import Dashboard from "./pages/Dashboard";
+import DashboardAdmin from "./pages/DashboardAdmin";
 import ProtectedRoute from "./components/ProtectedRoute";
  
 const AppContent: React.FC = () => {
@@ -43,7 +44,6 @@ const AppContent: React.FC = () => {
     "/dashboard",
   ];
  
-  // Cache si la route commence par une des routes ci-dessus
   const shouldHideMenu = hideMenuOn.some((path) =>
     location.pathname.startsWith(path)
   );
@@ -76,7 +76,17 @@ const AppContent: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
  
-        {/* 🔒 Dashboard protégé */}
+        {/* 🔒 Dashboard ADMIN */}
+        <Route
+          path="/dashboard/admin"
+          element={
+            <ProtectedRoute>
+              <DashboardAdmin />
+            </ProtectedRoute>
+          }
+        />
+ 
+        {/* 🔒 Dashboard SALON */}
         <Route
           path="/dashboard/*"
           element={
@@ -85,6 +95,9 @@ const AppContent: React.FC = () => {
             </ProtectedRoute>
           }
         />
+ 
+        {/* ❓ Route inconnue -> accueil */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

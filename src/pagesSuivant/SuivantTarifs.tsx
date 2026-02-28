@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
  
 type SubscriptionType = "standard" | "vip" | "premium";
@@ -19,13 +19,22 @@ type PremiumSalon = {
   id: string;
   name: string;
   city: string;
-  rating: number;     // (placeholder si tu n’as pas encore les avis)
-  distance: string;   // (placeholder si pas encore géolocalisation)
+  rating: number;
+  distance: string;
   coverUrl?: string;
   plan?: SubscriptionType;
 };
  
-const ROTATE_EVERY_MS = 2 * 60 * 1000; // ✅ change ici (ex: 30*1000, 5*60*1000)
+type HomeCovers = {
+  offresCoverUrl?: string;
+  evenementsCoverUrl?: string;
+  offresTitle?: string;
+  offresSubtitle?: string;
+  evenementsTitle?: string;
+  evenementsSubtitle?: string;
+};
+ 
+const ROTATE_EVERY_MS = 2 * 60 * 1000;
  
 function pickRandom<T>(arr: T[], n: number) {
   if (arr.length <= n) return arr;
@@ -46,7 +55,14 @@ const NosServices: React.FC = () => {
   const [rotating3, setRotating3] = useState<PremiumSalon[]>([]);
   const [cols, setCols] = useState(3);
  
-  // ✅ Responsive columns (1 mobile, 2 tablette, 3 desktop)
+  // ✅ Couvertures (depuis Firestore)
+  const [covers, setCovers] = useState<HomeCovers>({
+    offresTitle: "Offres du Moment",
+    offresSubtitle: "Promotions et publicités (gérées par le dashboard admin).",
+    evenementsTitle: "Espace événementielle",
+    evenementsSubtitle: "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services.",
+  });
+ 
   useEffect(() => {
     const compute = () => {
       const w = window.innerWidth;
@@ -59,13 +75,27 @@ const NosServices: React.FC = () => {
     return () => window.removeEventListener("resize", compute);
   }, []);
  
+  // ✅ Charger couvertures Offres / Événements
+  useEffect(() => {
+    (async () => {
+      try {
+        const snap = await getDoc(doc(db, "app_home", "main"));
+        if (snap.exists()) {
+          const data = snap.data() as HomeCovers;
+          setCovers((prev) => ({ ...prev, ...data }));
+        }
+      } catch (e) {
+        console.error("❌ load covers error:", e);
+      }
+    })();
+  }, []);
+ 
   // ✅ Charger salons Premium/VIP depuis Firestore
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
  
-        // salons actifs + premium/vip
         const qy = query(
           collection(db, "salons"),
           where("status", "==", "active"),
@@ -76,15 +106,11 @@ const NosServices: React.FC = () => {
  
         const data: PremiumSalon[] = snap.docs.map((d) => {
           const s = d.data() as SalonDoc;
- 
           const name = s.salonName?.trim() || "Salon";
           const city = s.city?.trim() || "Kinshasa";
  
-          // ✅ image: bannière prioritaire sinon profil
           const coverUrl = s.bannerImage || s.profileImage || undefined;
- 
-          // ⭐ placeholders (tu pourras remplacer par vrais avis/statistiques plus tard)
-          const rating = 4.7 + Math.random() * 0.2; // 4.7 - 4.9
+          const rating = 4.7 + Math.random() * 0.2;
           const distance = "";
  
           return {
@@ -110,13 +136,11 @@ const NosServices: React.FC = () => {
     })();
   }, []);
  
-  // ✅ Rotation automatique de 3 salons (premium/vip)
+  // ✅ Rotation automatique
   useEffect(() => {
     if (allPremium.length <= 3) return;
- 
     const interval = setInterval(() => {
       setRotating3((prev) => {
-        // évite de retomber sur exactement les mêmes 3 si possible
         const next = pickRandom(allPremium, 3);
         const prevIds = prev.map((p) => p.id).sort().join(",");
         const nextIds = next.map((p) => p.id).sort().join(",");
@@ -128,15 +152,13 @@ const NosServices: React.FC = () => {
     return () => clearInterval(interval);
   }, [allPremium]);
  
-  // ✅ Search sur la liste premium/vip (par nom)
+  // ✅ Search
   const filtered = useMemo(() => {
     const q = queryText.trim().toLowerCase();
     if (!q) return allPremium;
     return allPremium.filter((s) => s.name.toLowerCase().includes(q));
   }, [queryText, allPremium]);
  
-  // ✅ Pour la section "Nos Salons (Premium)" on utilise la rotation (3)
-  // mais si l'utilisateur tape dans la search: on affiche les résultats filtrés (max 3)
   const showcase = useMemo(() => {
     const q = queryText.trim();
     if (!q) return rotating3;
@@ -152,7 +174,6 @@ const NosServices: React.FC = () => {
           <h1 style={styles.title}>Trouvez votre salon de coiffure</h1>
           <p style={styles.subtitle}>Réservez en quelques clics</p>
  
-          {/* Search bar */}
           <div style={styles.searchWrap}>
             <span style={styles.searchIcon}>⌕</span>
             <input
@@ -164,7 +185,6 @@ const NosServices: React.FC = () => {
             <button
               style={styles.searchButton}
               onClick={() => {
-                // Si 1 seul salon match, on ouvre directement sa page.
                 if (filtered.length === 1) navigate(`/salon/${filtered[0].id}`);
                 else navigate("/salons");
               }}
@@ -173,7 +193,6 @@ const NosServices: React.FC = () => {
             </button>
           </div>
  
-          {/* Quick filters */}
           <div style={styles.quickRow}>
             <button style={styles.quickBtn} onClick={() => navigate("/salons")}>
               Catégories
@@ -185,23 +204,32 @@ const NosServices: React.FC = () => {
         </div>
       </div>
  
-      {/* Section: Offres du moment */}
+      {/* Offres */}
       <section style={styles.section}>
         <div style={styles.cardWide}>
           <div>
-            <h2 style={styles.h2}>Offres du Moment</h2>
+            <h2 style={styles.h2}>{covers.offresTitle || "Offres du Moment"}</h2>
             <p style={styles.p}>
-              Promotions et publicités (gérées plus tard par le dashboard admin).
+              {covers.offresSubtitle || "Promotions et publicités (gérées par le dashboard admin)."}
             </p>
             <button style={styles.cta} onClick={() => navigate("/offres")}>
               Voir les offres →
             </button>
           </div>
-          <div style={styles.wideImage} />
+ 
+          <div
+            style={{
+              ...styles.wideImage,
+              backgroundImage: covers.offresCoverUrl ? `url(${covers.offresCoverUrl})` : "none",
+              backgroundColor: covers.offresCoverUrl ? undefined : "rgba(255,255,255,0.06)",
+            }}
+          >
+            {!covers.offresCoverUrl && <div style={styles.noImage}>Aucune couverture</div>}
+          </div>
         </div>
       </section>
  
-      {/* Section: Nos Salons (Premium) */}
+      {/* Premium salons */}
       <section style={styles.section}>
         <div style={styles.sectionHead}>
           <h2 style={styles.h2}>Nos Salons (Premium)</h2>
@@ -217,12 +245,7 @@ const NosServices: React.FC = () => {
             Aucun salon Premium/VIP disponible pour le moment.
           </div>
         ) : (
-          <div
-            style={{
-              ...styles.grid,
-              gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-            }}
-          >
+          <div style={{ ...styles.grid, gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
             {showcase.map((salon) => (
               <button
                 key={salon.id}
@@ -236,9 +259,7 @@ const NosServices: React.FC = () => {
                     backgroundColor: salon.coverUrl ? undefined : "rgba(255,255,255,0.06)",
                   }}
                 >
-                  {!salon.coverUrl && (
-                    <div style={styles.noImage}>Pas d’image</div>
-                  )}
+                  {!salon.coverUrl && <div style={styles.noImage}>Pas d’image</div>}
                 </div>
  
                 <div style={styles.salonBody}>
@@ -247,50 +268,43 @@ const NosServices: React.FC = () => {
                   <div style={styles.salonMeta}>
                     <span style={styles.star}>★</span>
                     <span style={styles.rating}>{salon.rating.toFixed(1)}</span>
- 
-                    {!!salon.distance && (
-                      <>
-                        <span style={styles.dot}>•</span>
-                        <span>{salon.distance}</span>
-                      </>
-                    )}
                   </div>
  
                   <div style={styles.city}>{salon.city}</div>
  
-                  {/* Badge plan */}
                   <div style={{ marginTop: 10 }}>
-                    <span style={styles.planBadge}>
-                      {(salon.plan || "premium").toUpperCase()}
-                    </span>
+                    <span style={styles.planBadge}>{(salon.plan || "premium").toUpperCase()}</span>
                   </div>
                 </div>
               </button>
             ))}
           </div>
         )}
- 
-        {!queryText.trim() && allPremium.length > 3 && (
-          <div style={{ marginTop: 10, opacity: 0.75, fontSize: 13 }}>
-            Les salons Premium/VIP changent automatiquement toutes les{" "}
-            {Math.round(ROTATE_EVERY_MS / 60000)} minute(s).
-          </div>
-        )}
       </section>
  
-      {/* Section: Espace événementielle */}
+      {/* Événements */}
       <section style={styles.section}>
         <div style={styles.cardWideAlt}>
           <div>
-            <h2 style={styles.h2}>Espace événementielle</h2>
+            <h2 style={styles.h2}>{covers.evenementsTitle || "Espace événementielle"}</h2>
             <p style={styles.p}>
-              Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services.
+              {covers.evenementsSubtitle ||
+                "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services."}
             </p>
-            <button style={styles.cta} onClick={() => navigate("/Evenements")}>
+            <button style={styles.cta} onClick={() => navigate("/evenements")}>
               Découvrir →
             </button>
           </div>
-          <div style={styles.wideImageAlt} />
+ 
+          <div
+            style={{
+              ...styles.wideImageAlt,
+              backgroundImage: covers.evenementsCoverUrl ? `url(${covers.evenementsCoverUrl})` : "none",
+              backgroundColor: covers.evenementsCoverUrl ? undefined : "rgba(255,255,255,0.06)",
+            }}
+          >
+            {!covers.evenementsCoverUrl && <div style={styles.noImage}>Aucune couverture</div>}
+          </div>
         </div>
       </section>
  
@@ -305,11 +319,7 @@ const CARD = "rgba(255,255,255,0.06)";
 const BORDER = "rgba(212,175,55,0.25)";
  
 const styles: Record<string, React.CSSProperties> = {
-  page: {
-    background: BG,
-    color: "white",
-    minHeight: "100vh",
-  },
+  page: { background: BG, color: "white", minHeight: "100vh" },
   hero: {
     position: "relative",
     padding: "42px 18px 28px",
@@ -321,14 +331,9 @@ const styles: Record<string, React.CSSProperties> = {
   overlay: {
     position: "absolute",
     inset: 0,
-    background:
-      "linear-gradient(180deg, rgba(0,0,0,0.70), rgba(11,11,15,0.90))",
+    background: "linear-gradient(180deg, rgba(0,0,0,0.70), rgba(11,11,15,0.90))",
   },
-  heroContent: {
-    position: "relative",
-    maxWidth: 980,
-    margin: "0 auto",
-  },
+  heroContent: { position: "relative", maxWidth: 980, margin: "0 auto" },
   title: {
     margin: 0,
     fontSize: "clamp(22px, 4vw, 32px)",
@@ -336,10 +341,7 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: 0.3,
     textShadow: "0 2px 18px rgba(0,0,0,0.6)",
   },
-  subtitle: {
-    margin: "6px 0 18px",
-    opacity: 0.9,
-  },
+  subtitle: { margin: "6px 0 18px", opacity: 0.9 },
   searchWrap: {
     display: "flex",
     alignItems: "center",
@@ -378,7 +380,6 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 14,
     cursor: "pointer",
   },
- 
   section: { maxWidth: 980, margin: "0 auto", padding: "18px" },
   sectionHead: {
     display: "flex",
@@ -404,11 +405,11 @@ const styles: Record<string, React.CSSProperties> = {
     height: 130,
     borderRadius: 14,
     border: `1px solid ${BORDER}`,
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=60)",
     backgroundSize: "cover",
     backgroundPosition: "center",
     opacity: 0.95,
+    position: "relative",
+    overflow: "hidden",
   },
   cardWideAlt: {
     display: "grid",
@@ -424,11 +425,19 @@ const styles: Record<string, React.CSSProperties> = {
     height: 130,
     borderRadius: 14,
     border: `1px solid ${BORDER}`,
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1529634897861-1f63f74aa44b?auto=format&fit=crop&w=1200&q=60)",
     backgroundSize: "cover",
     backgroundPosition: "center",
     opacity: 0.95,
+    position: "relative",
+    overflow: "hidden",
+  },
+  noImage: {
+    position: "absolute",
+    inset: 0,
+    display: "grid",
+    placeItems: "center",
+    opacity: 0.8,
+    fontWeight: 900,
   },
   cta: {
     background: GOLD,
@@ -447,10 +456,7 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: "pointer",
   },
  
-  grid: {
-    display: "grid",
-    gap: 12,
-  },
+  grid: { display: "grid", gap: 12 },
   salonCard: {
     textAlign: "left",
     background: CARD,
@@ -459,7 +465,7 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: "hidden",
     cursor: "pointer",
     padding: 0,
-    color : "white",
+    color: "white",
   },
   salonImg: {
     height: 140,
@@ -467,20 +473,11 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundPosition: "center",
     position: "relative",
   },
-  noImage: {
-    position: "absolute",
-    inset: 0,
-    display: "grid",
-    placeItems: "center",
-    opacity: 0.75,
-    fontWeight: 800,
-  },
   salonBody: { padding: 12 },
   salonName: { fontWeight: 900, marginBottom: 6, fontSize: 16 },
   salonMeta: { display: "flex", alignItems: "center", gap: 6, opacity: 0.9 },
   star: { color: GOLD, fontWeight: 900 },
   rating: { fontWeight: 900 },
-  dot: { opacity: 0.6 },
   city: { marginTop: 6, opacity: 0.75, fontSize: 13 },
   planBadge: {
     display: "inline-block",
@@ -496,7 +493,6 @@ const styles: Record<string, React.CSSProperties> = {
 };
  
 export default NosServices;
-
 
 
 /*import { Swiper, SwiperSlide } from "swiper/react";

@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // ⚠️ adapte le chemin si ton dossier s'appelle "context" ou "contexts"
+import { useAuth } from "../context/AuthContext";
  
 interface Props {
   children: React.ReactNode;
@@ -9,21 +9,27 @@ interface Props {
 const ProtectedRoute: React.FC<Props> = ({ children }) => {
   const { user, loading } = useAuth();
  
-  // ✅ on attend que Firebase finisse de restaurer la session
+  // 🔄 On attend que Firebase termine la vérification
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
         Chargement...
       </div>
     );
   }
  
-  // ✅ si pas connecté => login
+  // 🚫 Pas connecté → redirection login
   if (!user) {
     return <Navigate to="/login" replace />;
   }
  
-  // ✅ connecté => on affiche la page protégée
+  // ✅ Connecté → accès autorisé
   return <>{children}</>;
 };
  
