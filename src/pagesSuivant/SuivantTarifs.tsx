@@ -13,6 +13,7 @@ type SalonDoc = {
   profileImage?: string;
   subscriptionType?: SubscriptionType;
   status?: "active" | "pending" | "disabled";
+  createdAt?: any;
 };
  
 type PremiumSalon = {
@@ -32,7 +33,15 @@ type HomeCovers = {
   offresSubtitle?: string;
   evenementsTitle?: string;
   evenementsSubtitle?: string;
+ 
+  // Optionnel si un jour tu veux gérer aussi l'image du hero
+  heroCoverUrl?: string;
 };
+ 
+const GOLD = "#D4AF37";
+const BG = "#0B0B0F";
+const CARD = "rgba(255,255,255,0.06)";
+const BORDER = "rgba(212,175,55,0.25)";
  
 const ROTATE_EVERY_MS = 2 * 60 * 1000;
  
@@ -55,14 +64,18 @@ const NosServices: React.FC = () => {
   const [rotating3, setRotating3] = useState<PremiumSalon[]>([]);
   const [cols, setCols] = useState(3);
  
-  // ✅ Couvertures (depuis Firestore)
+  // ✅ Couvertures (depuis Firestore app_home/main)
   const [covers, setCovers] = useState<HomeCovers>({
     offresTitle: "Offres du Moment",
     offresSubtitle: "Promotions et publicités (gérées par le dashboard admin).",
     evenementsTitle: "Espace événementielle",
-    evenementsSubtitle: "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services.",
+    evenementsSubtitle:
+      "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services.",
+    offresCoverUrl: "",
+    evenementsCoverUrl: "",
   });
  
+  // responsive grid
   useEffect(() => {
     const compute = () => {
       const w = window.innerWidth;
@@ -75,7 +88,7 @@ const NosServices: React.FC = () => {
     return () => window.removeEventListener("resize", compute);
   }, []);
  
-  // ✅ Charger couvertures Offres / Événements
+  // ✅ Charger les couvertures depuis Firestore: app_home/main
   useEffect(() => {
     (async () => {
       try {
@@ -83,6 +96,8 @@ const NosServices: React.FC = () => {
         if (snap.exists()) {
           const data = snap.data() as HomeCovers;
           setCovers((prev) => ({ ...prev, ...data }));
+        } else {
+          console.warn("⚠️ Firestore: app_home/main n'existe pas.");
         }
       } catch (e) {
         console.error("❌ load covers error:", e);
@@ -90,12 +105,13 @@ const NosServices: React.FC = () => {
     })();
   }, []);
  
-  // ✅ Charger salons Premium/VIP depuis Firestore
+  // ✅ Charger salons Premium/VIP actifs depuis Firestore
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
  
+        // Query principale: status active + subscriptionType in (premium/vip)
         const qy = query(
           collection(db, "salons"),
           where("status", "==", "active"),
@@ -106,19 +122,20 @@ const NosServices: React.FC = () => {
  
         const data: PremiumSalon[] = snap.docs.map((d) => {
           const s = d.data() as SalonDoc;
+ 
           const name = s.salonName?.trim() || "Salon";
           const city = s.city?.trim() || "Kinshasa";
- 
           const coverUrl = s.bannerImage || s.profileImage || undefined;
+ 
+          // petit rating fake (si tu n'as pas encore un vrai champ rating)
           const rating = 4.7 + Math.random() * 0.2;
-          const distance = "";
  
           return {
             id: d.id,
             name,
             city,
             rating,
-            distance,
+            distance: "",
             coverUrl,
             plan: s.subscriptionType,
           };
@@ -127,16 +144,43 @@ const NosServices: React.FC = () => {
         setAllPremium(data);
         setRotating3(pickRandom(data, 3));
       } catch (e) {
+        // Fallback si index manquant OU règles bloquent la query "in"
         console.error("❌ NosServices load salons error:", e);
-        setAllPremium([]);
-        setRotating3([]);
+ 
+        try {
+          const snap2 = await getDocs(
+            query(collection(db, "salons"), where("status", "==", "active"))
+          );
+ 
+          const data2: PremiumSalon[] = snap2.docs
+            .map((d) => {
+              const s = d.data() as SalonDoc;
+              return {
+                id: d.id,
+                name: s.salonName?.trim() || "Salon",
+                city: s.city?.trim() || "Kinshasa",
+                rating: 4.7 + Math.random() * 0.2,
+                distance: "",
+                coverUrl: s.bannerImage || s.profileImage || undefined,
+                plan: s.subscriptionType,
+              };
+            })
+            .filter((x) => x.plan === "premium" || x.plan === "vip");
+ 
+          setAllPremium(data2);
+          setRotating3(pickRandom(data2, 3));
+        } catch (e2) {
+          console.error("❌ Fallback salons error:", e2);
+          setAllPremium([]);
+          setRotating3([]);
+        }
       } finally {
         setLoading(false);
       }
     })();
   }, []);
  
-  // ✅ Rotation automatique
+  // ✅ Rotation automatique (si + de 3)
   useEffect(() => {
     if (allPremium.length <= 3) return;
     const interval = setInterval(() => {
@@ -152,7 +196,7 @@ const NosServices: React.FC = () => {
     return () => clearInterval(interval);
   }, [allPremium]);
  
-  // ✅ Search
+  // Search
   const filtered = useMemo(() => {
     const q = queryText.trim().toLowerCase();
     if (!q) return allPremium;
@@ -165,10 +209,15 @@ const NosServices: React.FC = () => {
     return filtered.slice(0, 3);
   }, [queryText, rotating3, filtered]);
  
+  // Hero image: soit Firestore heroCoverUrl (si tu le crées), sinon l'image par défaut
+  const heroBg = covers.heroCoverUrl?.trim()
+    ? `url(${covers.heroCoverUrl})`
+    : `url(https://images.unsplash.com/photo-1560067174-8943bd8f2662?auto=format&fit=crop&w=1400&q=60)`;
+ 
   return (
     <div style={styles.page}>
       {/* Hero */}
-      <div style={styles.hero}>
+      <div style={{ ...styles.hero, backgroundImage: heroBg }}>
         <div style={styles.overlay} />
         <div style={styles.heroContent}>
           <h1 style={styles.title}>Trouvez votre salon de coiffure</h1>
@@ -210,7 +259,8 @@ const NosServices: React.FC = () => {
           <div>
             <h2 style={styles.h2}>{covers.offresTitle || "Offres du Moment"}</h2>
             <p style={styles.p}>
-              {covers.offresSubtitle || "Promotions et publicités (gérées par le dashboard admin)."}
+              {covers.offresSubtitle ||
+                "Promotions et publicités (gérées par le dashboard admin)."}
             </p>
             <button style={styles.cta} onClick={() => navigate("/offres")}>
               Voir les offres →
@@ -220,11 +270,17 @@ const NosServices: React.FC = () => {
           <div
             style={{
               ...styles.wideImage,
-              backgroundImage: covers.offresCoverUrl ? `url(${covers.offresCoverUrl})` : "none",
-              backgroundColor: covers.offresCoverUrl ? undefined : "rgba(255,255,255,0.06)",
+              backgroundImage: covers.offresCoverUrl
+                ? `url(${covers.offresCoverUrl})`
+                : "none",
+              backgroundColor: covers.offresCoverUrl
+                ? undefined
+                : "rgba(255,255,255,0.06)",
             }}
           >
-            {!covers.offresCoverUrl && <div style={styles.noImage}>Aucune couverture</div>}
+            {!covers.offresCoverUrl && (
+              <div style={styles.noImage}>Aucune couverture</div>
+            )}
           </div>
         </div>
       </section>
@@ -245,7 +301,12 @@ const NosServices: React.FC = () => {
             Aucun salon Premium/VIP disponible pour le moment.
           </div>
         ) : (
-          <div style={{ ...styles.grid, gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+          <div
+            style={{
+              ...styles.grid,
+              gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            }}
+          >
             {showcase.map((salon) => (
               <button
                 key={salon.id}
@@ -273,7 +334,9 @@ const NosServices: React.FC = () => {
                   <div style={styles.city}>{salon.city}</div>
  
                   <div style={{ marginTop: 10 }}>
-                    <span style={styles.planBadge}>{(salon.plan || "premium").toUpperCase()}</span>
+                    <span style={styles.planBadge}>
+                      {(salon.plan || "premium").toUpperCase()}
+                    </span>
                   </div>
                 </div>
               </button>
@@ -286,7 +349,9 @@ const NosServices: React.FC = () => {
       <section style={styles.section}>
         <div style={styles.cardWideAlt}>
           <div>
-            <h2 style={styles.h2}>{covers.evenementsTitle || "Espace événementielle"}</h2>
+            <h2 style={styles.h2}>
+              {covers.evenementsTitle || "Espace événementielle"}
+            </h2>
             <p style={styles.p}>
               {covers.evenementsSubtitle ||
                 "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services."}
@@ -299,11 +364,17 @@ const NosServices: React.FC = () => {
           <div
             style={{
               ...styles.wideImageAlt,
-              backgroundImage: covers.evenementsCoverUrl ? `url(${covers.evenementsCoverUrl})` : "none",
-              backgroundColor: covers.evenementsCoverUrl ? undefined : "rgba(255,255,255,0.06)",
+              backgroundImage: covers.evenementsCoverUrl
+                ? `url(${covers.evenementsCoverUrl})`
+                : "none",
+              backgroundColor: covers.evenementsCoverUrl
+                ? undefined
+                : "rgba(255,255,255,0.06)",
             }}
           >
-            {!covers.evenementsCoverUrl && <div style={styles.noImage}>Aucune couverture</div>}
+            {!covers.evenementsCoverUrl && (
+              <div style={styles.noImage}>Aucune couverture</div>
+            )}
           </div>
         </div>
       </section>
@@ -312,19 +383,13 @@ const NosServices: React.FC = () => {
     </div>
   );
 };
-
-const GOLD = "#D4AF37";
-const BG = "#0B0B0F";
-const CARD = "rgba(255,255,255,0.06)";
-const BORDER = "rgba(212,175,55,0.25)";
  
 const styles: Record<string, React.CSSProperties> = {
   page: { background: BG, color: "white", minHeight: "100vh" },
+ 
   hero: {
     position: "relative",
     padding: "42px 18px 28px",
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1560067174-8943bd8f2662?auto=format&fit=crop&w=1400&q=60)",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -342,6 +407,7 @@ const styles: Record<string, React.CSSProperties> = {
     textShadow: "0 2px 18px rgba(0,0,0,0.6)",
   },
   subtitle: { margin: "6px 0 18px", opacity: 0.9 },
+ 
   searchWrap: {
     display: "flex",
     alignItems: "center",
@@ -371,6 +437,7 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     whiteSpace: "nowrap",
   },
+ 
   quickRow: { display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" },
   quickBtn: {
     background: "rgba(255,255,255,0.08)",
@@ -380,6 +447,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 14,
     cursor: "pointer",
   },
+ 
   section: { maxWidth: 980, margin: "0 auto", padding: "18px" },
   sectionHead: {
     display: "flex",
@@ -388,6 +456,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: 10,
     marginBottom: 10,
   },
+ 
   h2: { margin: 0, fontSize: 18, fontWeight: 900, color: "white" },
   p: { margin: "8px 0 14px", opacity: 0.85, lineHeight: 1.4 },
  
@@ -411,6 +480,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative",
     overflow: "hidden",
   },
+ 
   cardWideAlt: {
     display: "grid",
     gridTemplateColumns: "1.2fr 1fr",
@@ -431,6 +501,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative",
     overflow: "hidden",
   },
+ 
   noImage: {
     position: "absolute",
     inset: 0,
@@ -439,6 +510,7 @@ const styles: Record<string, React.CSSProperties> = {
     opacity: 0.8,
     fontWeight: 900,
   },
+ 
   cta: {
     background: GOLD,
     border: "none",
@@ -457,6 +529,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
  
   grid: { display: "grid", gap: 12 },
+ 
   salonCard: {
     textAlign: "left",
     background: CARD,
@@ -493,7 +566,6 @@ const styles: Record<string, React.CSSProperties> = {
 };
  
 export default NosServices;
-
 
 /*import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";

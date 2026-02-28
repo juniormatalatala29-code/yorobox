@@ -44,7 +44,7 @@ const Evenements: React.FC = () => {
         setLoading(true);
  
         // ✅ 1) Couverture HERO depuis ui/home
-        const uiSnap = await getDoc(doc(db, "ui", "home"));
+        const uiSnap = await getDoc(doc(db, "app_home", "nos_services"));
         if (uiSnap.exists()) setUi(uiSnap.data() as UiHomeDoc);
  
         // ✅ 2) Events actifs depuis collection events
