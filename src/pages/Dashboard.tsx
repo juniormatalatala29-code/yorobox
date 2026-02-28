@@ -170,7 +170,7 @@ const Dashboard: React.FC = () => {
     if (!form.salonName.trim()) return alert("Ajoute le nom du salon.");
     if (!form.city.trim()) return alert("Ajoute la ville.");
     if (form.whatsapp && !/^\d{8,15}$/.test(form.whatsapp.trim())) {
-      return alert("WhatsApp doit être uniquement des chiffres (ex: 243811298054).");
+      return alert("WhatsApp doit être uniquement des chiffres (ex: 243977506981).");
     }
 
     try {
@@ -249,13 +249,13 @@ const Dashboard: React.FC = () => {
       }
 
       setForm((p) => {
-        const next = [...(p.gallery || []), ...urls].slice(0, 12); // ✅ max 12 images au total
+        const next = [...(p.gallery || []), ...urls].slice(0, 15); // ✅ max 12 images au total
         return { ...p, gallery: next };
       });
 
       if (salonRef) {
         const current = form.gallery || [];
-        const next = [...current, ...urls].slice(0, 12);
+        const next = [...current, ...urls].slice(0, 15);
         await updateDoc(salonRef, { gallery: next, updatedAt: serverTimestamp() });
       }
     } catch (e) {
@@ -326,7 +326,7 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div style={{ minHeight: "100vh", background: bg, color: "#fff", padding: 24 }}>
-        <h2 style={{ color: gold }}>Espace Salon</h2>
+        <h2 style={{ color: gold }}>Mon Salon</h2>
         <p style={{ opacity: 0.85 }}>Chargement…</p>
       </div>
     );
@@ -450,7 +450,7 @@ const Dashboard: React.FC = () => {
               <input
                 value={form.whatsapp}
                 onChange={(e) => setField("whatsapp", e.target.value.replace(/\s/g, ""))}
-                placeholder="Ex: 243811298054"
+                placeholder="Ex: 243977506981"
                 style={inputStyle}
               />
               <SmallHint text="Astuce: mets l’indicatif pays (243…)." />
