@@ -26,16 +26,17 @@ type PremiumSalon = {
   plan?: SubscriptionType;
 };
  
+/** ✅ CHAMPS = EXACTEMENT ceux du dashboard (anglais) */
 type HomeCovers = {
-  offresCoverUrl?: string;
-  evenementsCoverUrl?: string;
-  offresTitle?: string;
-  offresSubtitle?: string;
-  evenementsTitle?: string;
-  evenementsSubtitle?: string;
+  offersCoverUrl?: string;
+  offersTitle?: string;
+  offersSubtitle?: string;
  
-  // Optionnel si un jour tu veux gérer aussi l'image du hero
-  heroCoverUrl?: string;
+  eventsCoverUrl?: string;
+  eventsTitle?: string;
+  eventsSubtitle?: string;
+ 
+  heroCoverUrl?: string; // optionnel si un jour tu l'ajoutes dans le dashboard
 };
  
 const GOLD = "#D4AF37";
@@ -64,15 +65,14 @@ const NosServices: React.FC = () => {
   const [rotating3, setRotating3] = useState<PremiumSalon[]>([]);
   const [cols, setCols] = useState(3);
  
-  // ✅ Couvertures (depuis Firestore app_home/main)
+  // ✅ Valeurs par défaut (si Firestore vide)
   const [covers, setCovers] = useState<HomeCovers>({
-    offresTitle: "Offres du Moment",
-    offresSubtitle: "Promotions et publicités (gérées par le dashboard admin).",
-    evenementsTitle: "Espace événementielle",
-    evenementsSubtitle:
-      "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services.",
-    offresCoverUrl: "",
-    evenementsCoverUrl: "",
+    offersTitle: "Offres du Moment",
+    offersSubtitle: "Promotions et publicités (gérées par le dashboard admin).",
+    eventsTitle: "Espace événementielle",
+    eventsSubtitle: "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services.",
+    offersCoverUrl: "",
+    eventsCoverUrl: "",
   });
  
   // responsive grid
@@ -88,16 +88,16 @@ const NosServices: React.FC = () => {
     return () => window.removeEventListener("resize", compute);
   }, []);
  
-  // ✅ Charger les couvertures depuis Firestore: app_home/main
+  // ✅ Lire EXACTEMENT le même doc que le dashboard: app_home/nos_services
   useEffect(() => {
     (async () => {
       try {
-        const snap = await getDoc(doc(db, "app_home", "main"));
+        const snap = await getDoc(doc(db, "app_home", "nos_services"));
         if (snap.exists()) {
           const data = snap.data() as HomeCovers;
           setCovers((prev) => ({ ...prev, ...data }));
         } else {
-          console.warn("⚠️ Firestore: app_home/main n'existe pas.");
+          console.warn("⚠️ app_home/nos_services n'existe pas (crée-le via dashboard).");
         }
       } catch (e) {
         console.error("❌ load covers error:", e);
@@ -105,13 +105,12 @@ const NosServices: React.FC = () => {
     })();
   }, []);
  
-  // ✅ Charger salons Premium/VIP actifs depuis Firestore
+  // ✅ Charger salons Premium/VIP actifs
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
  
-        // Query principale: status active + subscriptionType in (premium/vip)
         const qy = query(
           collection(db, "salons"),
           where("status", "==", "active"),
@@ -122,21 +121,13 @@ const NosServices: React.FC = () => {
  
         const data: PremiumSalon[] = snap.docs.map((d) => {
           const s = d.data() as SalonDoc;
- 
-          const name = s.salonName?.trim() || "Salon";
-          const city = s.city?.trim() || "Kinshasa";
-          const coverUrl = s.bannerImage || s.profileImage || undefined;
- 
-          // petit rating fake (si tu n'as pas encore un vrai champ rating)
-          const rating = 4.7 + Math.random() * 0.2;
- 
           return {
             id: d.id,
-            name,
-            city,
-            rating,
+            name: s.salonName?.trim() || "Salon",
+            city: s.city?.trim() || "Kinshasa",
+            rating: 4.7 + Math.random() * 0.2,
             distance: "",
-            coverUrl,
+            coverUrl: s.bannerImage || s.profileImage || undefined,
             plan: s.subscriptionType,
           };
         });
@@ -144,59 +135,23 @@ const NosServices: React.FC = () => {
         setAllPremium(data);
         setRotating3(pickRandom(data, 3));
       } catch (e) {
-        // Fallback si index manquant OU règles bloquent la query "in"
         console.error("❌ NosServices load salons error:", e);
- 
-        try {
-          const snap2 = await getDocs(
-            query(collection(db, "salons"), where("status", "==", "active"))
-          );
- 
-          const data2: PremiumSalon[] = snap2.docs
-            .map((d) => {
-              const s = d.data() as SalonDoc;
-              return {
-                id: d.id,
-                name: s.salonName?.trim() || "Salon",
-                city: s.city?.trim() || "Kinshasa",
-                rating: 4.7 + Math.random() * 0.2,
-                distance: "",
-                coverUrl: s.bannerImage || s.profileImage || undefined,
-                plan: s.subscriptionType,
-              };
-            })
-            .filter((x) => x.plan === "premium" || x.plan === "vip");
- 
-          setAllPremium(data2);
-          setRotating3(pickRandom(data2, 3));
-        } catch (e2) {
-          console.error("❌ Fallback salons error:", e2);
-          setAllPremium([]);
-          setRotating3([]);
-        }
+        setAllPremium([]);
+        setRotating3([]);
       } finally {
         setLoading(false);
       }
     })();
   }, []);
  
-  // ✅ Rotation automatique (si + de 3)
   useEffect(() => {
     if (allPremium.length <= 3) return;
     const interval = setInterval(() => {
-      setRotating3((prev) => {
-        const next = pickRandom(allPremium, 3);
-        const prevIds = prev.map((p) => p.id).sort().join(",");
-        const nextIds = next.map((p) => p.id).sort().join(",");
-        if (prevIds === nextIds) return pickRandom(allPremium, 3);
-        return next;
-      });
+      setRotating3(() => pickRandom(allPremium, 3));
     }, ROTATE_EVERY_MS);
- 
     return () => clearInterval(interval);
   }, [allPremium]);
  
-  // Search
   const filtered = useMemo(() => {
     const q = queryText.trim().toLowerCase();
     if (!q) return allPremium;
@@ -209,15 +164,13 @@ const NosServices: React.FC = () => {
     return filtered.slice(0, 3);
   }, [queryText, rotating3, filtered]);
  
-  // Hero image: soit Firestore heroCoverUrl (si tu le crées), sinon l'image par défaut
-  const heroBg = covers.heroCoverUrl?.trim()
-    ? `url(${covers.heroCoverUrl})`
-    : `url(https://images.unsplash.com/photo-1560067174-8943bd8f2662?auto=format&fit=crop&w=1400&q=60)`;
+  // ✅ Hero: uniquement Firestore (sinon pas d'image)
+  const heroBg = covers.heroCoverUrl?.trim() ? `url(${covers.heroCoverUrl})` : "none";
  
   return (
     <div style={styles.page}>
       {/* Hero */}
-      <div style={{ ...styles.hero, backgroundImage: heroBg }}>
+      <div style={{ ...styles.hero, backgroundImage: heroBg, backgroundColor: heroBg === "none" ? "rgba(255,255,255,0.03)" : undefined }}>
         <div style={styles.overlay} />
         <div style={styles.heroContent}>
           <h1 style={styles.title}>Trouvez votre salon de coiffure</h1>
@@ -257,11 +210,8 @@ const NosServices: React.FC = () => {
       <section style={styles.section}>
         <div style={styles.cardWide}>
           <div>
-            <h2 style={styles.h2}>{covers.offresTitle || "Offres du Moment"}</h2>
-            <p style={styles.p}>
-              {covers.offresSubtitle ||
-                "Promotions et publicités (gérées par le dashboard admin)."}
-            </p>
+            <h2 style={styles.h2}>{covers.offersTitle || "Offres du Moment"}</h2>
+            <p style={styles.p}>{covers.offersSubtitle || "Promotions et publicités (gérées par le dashboard admin)."}</p>
             <button style={styles.cta} onClick={() => navigate("/offres")}>
               Voir les offres →
             </button>
@@ -270,17 +220,11 @@ const NosServices: React.FC = () => {
           <div
             style={{
               ...styles.wideImage,
-              backgroundImage: covers.offresCoverUrl
-                ? `url(${covers.offresCoverUrl})`
-                : "none",
-              backgroundColor: covers.offresCoverUrl
-                ? undefined
-                : "rgba(255,255,255,0.06)",
+              backgroundImage: covers.offersCoverUrl ? `url(${covers.offersCoverUrl})` : "none",
+              backgroundColor: covers.offersCoverUrl ? undefined : "rgba(255,255,255,0.06)",
             }}
           >
-            {!covers.offresCoverUrl && (
-              <div style={styles.noImage}>Aucune couverture</div>
-            )}
+            {!covers.offersCoverUrl && <div style={styles.noImage}>Aucune couverture</div>}
           </div>
         </div>
       </section>
@@ -297,22 +241,11 @@ const NosServices: React.FC = () => {
         {loading ? (
           <div style={{ opacity: 0.85, padding: "8px 2px" }}>Chargement…</div>
         ) : allPremium.length === 0 ? (
-          <div style={{ opacity: 0.85, padding: "8px 2px" }}>
-            Aucun salon Premium/VIP disponible pour le moment.
-          </div>
+          <div style={{ opacity: 0.85, padding: "8px 2px" }}>Aucun salon Premium/VIP disponible pour le moment.</div>
         ) : (
-          <div
-            style={{
-              ...styles.grid,
-              gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-            }}
-          >
+          <div style={{ ...styles.grid, gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
             {showcase.map((salon) => (
-              <button
-                key={salon.id}
-                style={styles.salonCard}
-                onClick={() => navigate("/salon/" + salon.id)}
-              >
+              <button key={salon.id} style={styles.salonCard} onClick={() => navigate("/salon/" + salon.id)}>
                 <div
                   style={{
                     ...styles.salonImg,
@@ -334,9 +267,7 @@ const NosServices: React.FC = () => {
                   <div style={styles.city}>{salon.city}</div>
  
                   <div style={{ marginTop: 10 }}>
-                    <span style={styles.planBadge}>
-                      {(salon.plan || "premium").toUpperCase()}
-                    </span>
+                    <span style={styles.planBadge}>{(salon.plan || "premium").toUpperCase()}</span>
                   </div>
                 </div>
               </button>
@@ -349,13 +280,8 @@ const NosServices: React.FC = () => {
       <section style={styles.section}>
         <div style={styles.cardWideAlt}>
           <div>
-            <h2 style={styles.h2}>
-              {covers.evenementsTitle || "Espace événementielle"}
-            </h2>
-            <p style={styles.p}>
-              {covers.evenementsSubtitle ||
-                "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services."}
-            </p>
+            <h2 style={styles.h2}>{covers.eventsTitle || "Espace événementielle"}</h2>
+            <p style={styles.p}>{covers.eventsSubtitle || "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services."}</p>
             <button style={styles.cta} onClick={() => navigate("/evenements")}>
               Découvrir →
             </button>
@@ -364,17 +290,11 @@ const NosServices: React.FC = () => {
           <div
             style={{
               ...styles.wideImageAlt,
-              backgroundImage: covers.evenementsCoverUrl
-                ? `url(${covers.evenementsCoverUrl})`
-                : "none",
-              backgroundColor: covers.evenementsCoverUrl
-                ? undefined
-                : "rgba(255,255,255,0.06)",
+              backgroundImage: covers.eventsCoverUrl ? `url(${covers.eventsCoverUrl})` : "none",
+              backgroundColor: covers.eventsCoverUrl ? undefined : "rgba(255,255,255,0.06)",
             }}
           >
-            {!covers.evenementsCoverUrl && (
-              <div style={styles.noImage}>Aucune couverture</div>
-            )}
+            {!covers.eventsCoverUrl && <div style={styles.noImage}>Aucune couverture</div>}
           </div>
         </div>
       </section>
@@ -387,249 +307,46 @@ const NosServices: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   page: { background: BG, color: "white", minHeight: "100vh" },
  
-  hero: {
-    position: "relative",
-    padding: "42px 18px 28px",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  overlay: {
-    position: "absolute",
-    inset: 0,
-    background: "linear-gradient(180deg, rgba(0,0,0,0.70), rgba(11,11,15,0.90))",
-  },
+  hero: { position: "relative", padding: "42px 18px 28px", backgroundSize: "cover", backgroundPosition: "center" },
+  overlay: { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.70), rgba(11,11,15,0.90))" },
   heroContent: { position: "relative", maxWidth: 980, margin: "0 auto" },
-  title: {
-    margin: 0,
-    fontSize: "clamp(22px, 4vw, 32px)",
-    fontWeight: 800,
-    letterSpacing: 0.3,
-    textShadow: "0 2px 18px rgba(0,0,0,0.6)",
-  },
+  title: { margin: 0, fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 800, letterSpacing: 0.3, textShadow: "0 2px 18px rgba(0,0,0,0.6)" },
   subtitle: { margin: "6px 0 18px", opacity: 0.9 },
  
-  searchWrap: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    background: "rgba(0,0,0,0.55)",
-    border: `1px solid ${BORDER}`,
-    borderRadius: 16,
-    padding: "12px 12px",
-    backdropFilter: "blur(8px)",
-  },
+  searchWrap: { display: "flex", alignItems: "center", gap: 10, background: "rgba(0,0,0,0.55)", border: `1px solid ${BORDER}`, borderRadius: 16, padding: "12px 12px", backdropFilter: "blur(8px)" },
   searchIcon: { opacity: 0.8, fontSize: 18 },
-  searchInput: {
-    flex: 1,
-    background: "transparent",
-    border: "none",
-    outline: "none",
-    color: "white",
-    fontSize: 14,
-    minWidth: 120,
-  },
-  searchButton: {
-    background: GOLD,
-    border: "none",
-    padding: "10px 12px",
-    borderRadius: 12,
-    fontWeight: 800,
-    cursor: "pointer",
-    whiteSpace: "nowrap",
-  },
+  searchInput: { flex: 1, background: "transparent", border: "none", outline: "none", color: "white", fontSize: 14, minWidth: 120 },
+  searchButton: { background: GOLD, border: "none", padding: "10px 12px", borderRadius: 12, fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" },
  
   quickRow: { display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" },
-  quickBtn: {
-    background: "rgba(255,255,255,0.08)",
-    border: `1px solid ${BORDER}`,
-    color: "white",
-    padding: "10px 12px",
-    borderRadius: 14,
-    cursor: "pointer",
-  },
+  quickBtn: { background: "rgba(255,255,255,0.08)", border: `1px solid ${BORDER}`, color: "white", padding: "10px 12px", borderRadius: 14, cursor: "pointer" },
  
   section: { maxWidth: 980, margin: "0 auto", padding: "18px" },
-  sectionHead: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 10,
-  },
- 
+  sectionHead: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 10 },
   h2: { margin: 0, fontSize: 18, fontWeight: 900, color: "white" },
   p: { margin: "8px 0 14px", opacity: 0.85, lineHeight: 1.4 },
  
-  cardWide: {
-    display: "grid",
-    gridTemplateColumns: "1.2fr 1fr",
-    gap: 14,
-    background: CARD,
-    border: `1px solid ${BORDER}`,
-    borderRadius: 18,
-    padding: 16,
-    alignItems: "center",
-  },
-  wideImage: {
-    height: 130,
-    borderRadius: 14,
-    border: `1px solid ${BORDER}`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    opacity: 0.95,
-    position: "relative",
-    overflow: "hidden",
-  },
+  cardWide: { display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 14, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 18, padding: 16, alignItems: "center" },
+  wideImage: { height: 130, borderRadius: 14, border: `1px solid ${BORDER}`, backgroundSize: "cover", backgroundPosition: "center", opacity: 0.95, position: "relative", overflow: "hidden" },
  
-  cardWideAlt: {
-    display: "grid",
-    gridTemplateColumns: "1.2fr 1fr",
-    gap: 14,
-    background: CARD,
-    border: `1px solid ${BORDER}`,
-    borderRadius: 18,
-    padding: 16,
-    alignItems: "center",
-  },
-  wideImageAlt: {
-    height: 130,
-    borderRadius: 14,
-    border: `1px solid ${BORDER}`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    opacity: 0.95,
-    position: "relative",
-    overflow: "hidden",
-  },
+  cardWideAlt: { display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 14, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 18, padding: 16, alignItems: "center" },
+  wideImageAlt: { height: 130, borderRadius: 14, border: `1px solid ${BORDER}`, backgroundSize: "cover", backgroundPosition: "center", opacity: 0.95, position: "relative", overflow: "hidden" },
  
-  noImage: {
-    position: "absolute",
-    inset: 0,
-    display: "grid",
-    placeItems: "center",
-    opacity: 0.8,
-    fontWeight: 900,
-  },
+  noImage: { position: "absolute", inset: 0, display: "grid", placeItems: "center", opacity: 0.8, fontWeight: 900 },
  
-  cta: {
-    background: GOLD,
-    border: "none",
-    padding: "10px 14px",
-    borderRadius: 12,
-    fontWeight: 900,
-    cursor: "pointer",
-  },
-  linkBtn: {
-    background: "transparent",
-    border: `1px solid ${BORDER}`,
-    color: "white",
-    padding: "8px 12px",
-    borderRadius: 12,
-    cursor: "pointer",
-  },
+  cta: { background: GOLD, border: "none", padding: "10px 14px", borderRadius: 12, fontWeight: 900, cursor: "pointer" },
+  linkBtn: { background: "transparent", border: `1px solid ${BORDER}`, color: "white", padding: "8px 12px", borderRadius: 12, cursor: "pointer" },
  
   grid: { display: "grid", gap: 12 },
- 
-  salonCard: {
-    textAlign: "left",
-    background: CARD,
-    border: `1px solid ${BORDER}`,
-    borderRadius: 16,
-    overflow: "hidden",
-    cursor: "pointer",
-    padding: 0,
-    color: "white",
-  },
-  salonImg: {
-    height: 140,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    position: "relative",
-  },
+  salonCard: { textAlign: "left", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, overflow: "hidden", cursor: "pointer", padding: 0, color: "white" },
+  salonImg: { height: 140, backgroundSize: "cover", backgroundPosition: "center", position: "relative" },
   salonBody: { padding: 12 },
   salonName: { fontWeight: 900, marginBottom: 6, fontSize: 16 },
   salonMeta: { display: "flex", alignItems: "center", gap: 6, opacity: 0.9 },
   star: { color: GOLD, fontWeight: 900 },
   rating: { fontWeight: 900 },
   city: { marginTop: 6, opacity: 0.75, fontSize: 13 },
-  planBadge: {
-    display: "inline-block",
-    padding: "6px 10px",
-    borderRadius: 999,
-    border: `1px solid ${BORDER}`,
-    background: "rgba(0,0,0,0.35)",
-    color: GOLD,
-    fontWeight: 900,
-    fontSize: 12,
-    letterSpacing: 0.6,
-  },
+  planBadge: { display: "inline-block", padding: "6px 10px", borderRadius: 999, border: `1px solid ${BORDER}`, background: "rgba(0,0,0,0.35)", color: GOLD, fontWeight: 900, fontSize: 12, letterSpacing: 0.6 },
 };
  
 export default NosServices;
-
-/*import { Swiper, SwiperSlide } from "swiper/react";
-import { Link } from "react-router-dom";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import "../pages/Multimedia.css";
-
-import "swiper/css/bundle";
-
-const images = [
-  "/images/image1.jpg",
-  "/images/image2.jpg",
-  "/images/image3.jpg",
-  "/images/image4.jpg",
-  "/images/image5.jpg",
-  "/images/image6.jpg",
-  "/images/image7.jpg",
-  "/images/image8.jpg",
-  "/images/image9.jpg",
-  "/images/image10.jpg",
-  "/images/image11.jpg",
-  "/images/image12.jpg",
-  "/images/image13.jpg",
-];
-
-export default function Multimedia() {
-  return (
-    <section className="multimedia-section">
-
-      <div className="content-wrapper">
-        {/* CARD }
-        <div className="glass-card">
-          <h2 className="title">Nos Modèles Signature</h2>
-          <p className="subtitle">
-            Découvrez l’élégance, le style et la perfection de nos coiffures
-          </p>
-
-          <Swiper
-            modules={[Autoplay, Pagination, Navigation]}
-            autoplay={{ delay: 3500, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
-            navigation
-            loop
-            className="swiper-container"
-          >
-            {images.map((img, index) => (
-              <SwiperSlide key={index}>
-                <div className="image-wrapper">
-                  <img src={img} alt={`Modèle ${index}`} />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        {/* BOUTON SOUS LA CARD  }
-        <div className="bottom-section">
-          <Link to="/formulaire">
-            <button className="cta-button">Commencer ma réservation</button>
-          </Link>
-          <footer className="Tarifs-footer">
-            Une Application Web développée par YoroBox
-          </footer>
-        </div>
-      </div>
-    </section>
-  );
-} */
