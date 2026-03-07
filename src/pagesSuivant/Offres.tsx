@@ -117,11 +117,9 @@ const Offres: React.FC = () => {
         </div>
  
         {loading ? (
-          <div style={{ opacity: 0.85, padding: "8px 2px" }}>Chargement…</div>
+          <div style={styles.stateBox}>Chargement…</div>
         ) : offres.length === 0 ? (
-          <div style={{ opacity: 0.85, padding: "8px 2px" }}>
-            Aucune offre disponible pour le moment.
-          </div>
+          <div style={styles.stateBox}>Aucune offre disponible pour le moment.</div>
         ) : (
           <div
             style={{
@@ -136,16 +134,17 @@ const Offres: React.FC = () => {
                 onClick={() => openLink(o.link)}
                 title={o.link}
               >
-                <div
-                  style={{
-                    ...styles.cover,
-                    backgroundImage: o.imageUrl ? `url(${o.imageUrl.trim()})` : "none",
-                    backgroundColor: o.imageUrl
-                      ? undefined
-                      : "rgba(255,255,255,0.06)",
-                  }}
-                >
-                  {!o.imageUrl && <div style={styles.noImage}>Aucune image</div>}
+                <div style={styles.coverWrap}>
+                  {o.imageUrl ? (
+                    <img
+                      src={o.imageUrl.trim()}
+                      alt={o.title}
+                      style={styles.coverImg}
+                    />
+                  ) : (
+                    <div style={styles.noImage}>Aucune image</div>
+                  )}
+ 
                   {o.badge ? <div style={styles.badge}>{o.badge}</div> : null}
                 </div>
  
@@ -160,7 +159,7 @@ const Offres: React.FC = () => {
         )}
  
         {!loading && !hasData && offres.length > 0 && (
-          <div style={{ marginTop: 12, opacity: 0.75, fontSize: 13 }}>
+          <div style={styles.bottomInfo}>
             Certaines offres n’ont pas encore d’image ou de lien.
           </div>
         )}
@@ -173,14 +172,26 @@ const Offres: React.FC = () => {
  
 const styles: Record<string, React.CSSProperties> = {
   page: { background: BG, color: "white", minHeight: "100vh" },
-  container: { maxWidth: 980, margin: "0 auto", padding: 18 },
-  header: { marginBottom: 14 },
-  title: { margin: 0, fontSize: 26, fontWeight: 900 },
+ 
+  container: { maxWidth: 1080, margin: "0 auto", padding: 18 },
+ 
+  header: { marginBottom: 16 },
+ 
+  title: { margin: 0, fontSize: 28, fontWeight: 900 },
+ 
   subtitle: { margin: "8px 0 0", opacity: 0.85, lineHeight: 1.5 },
+ 
+  stateBox: {
+    background: CARD,
+    border: `1px solid ${BORDER}`,
+    borderRadius: 16,
+    padding: 16,
+    opacity: 0.9,
+  },
  
   grid: {
     display: "grid",
-    gap: 12,
+    gap: 14,
     marginTop: 14,
   },
  
@@ -188,18 +199,25 @@ const styles: Record<string, React.CSSProperties> = {
     textAlign: "left",
     background: CARD,
     border: `1px solid ${BORDER}`,
-    borderRadius: 16,
+    borderRadius: 18,
     overflow: "hidden",
     cursor: "pointer",
     padding: 0,
     color: "white",
+    boxShadow: "0 10px 24px rgba(0,0,0,0.18)",
   },
  
-  cover: {
-    height: 140,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+  coverWrap: {
     position: "relative",
+    height: 180,
+    background: "rgba(255,255,255,0.04)",
+  },
+ 
+  coverImg: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    display: "block",
   },
  
   noImage: {
@@ -213,20 +231,42 @@ const styles: Record<string, React.CSSProperties> = {
  
   badge: {
     position: "absolute",
-    top: 10,
-    left: 10,
+    top: 12,
+    left: 12,
     background: "rgba(0,0,0,0.65)",
     border: `1px solid ${BORDER}`,
     color: GOLD,
     padding: "6px 10px",
     borderRadius: 999,
     fontWeight: 900,
+    fontSize: 12,
   },
  
-  body: { padding: 12 },
-  cardTitle: { fontWeight: 900, marginBottom: 6 },
-  desc: { opacity: 0.85, lineHeight: 1.4, marginBottom: 10 },
-  link: { color: GOLD, fontWeight: 900 },
+  body: { padding: 14 },
+ 
+  cardTitle: {
+    fontWeight: 900,
+    marginBottom: 8,
+    fontSize: 17,
+  },
+ 
+  desc: {
+    opacity: 0.85,
+    lineHeight: 1.5,
+    marginBottom: 12,
+    minHeight: 48,
+  },
+ 
+  link: {
+    color: GOLD,
+    fontWeight: 900,
+  },
+ 
+  bottomInfo: {
+    marginTop: 12,
+    opacity: 0.75,
+    fontSize: 13,
+  },
 };
  
 export default Offres;
