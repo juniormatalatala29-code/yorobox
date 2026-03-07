@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
  
 import "./styles/global.css";
- 
 import Menu from "./components/Menu";
  
 // Pages publiques
