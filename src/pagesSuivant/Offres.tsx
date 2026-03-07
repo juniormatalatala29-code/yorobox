@@ -18,8 +18,8 @@ type AdDoc = {
   title?: string;
   imageUrl?: string;
   targetUrl?: string;
-  desc?: string; // ✅ optionnel si tu l’ajoutes dans Firestore plus tard
-  badge?: string; // ✅ optionnel
+  desc?: string;
+  badge?: string;
   active?: boolean;
   createdAt?: Timestamp | null;
 };
@@ -38,7 +38,6 @@ const Offres: React.FC = () => {
   const [offres, setOffres] = useState<Offre[]>([]);
   const [cols, setCols] = useState(3);
  
-  // ✅ Responsive columns
   useEffect(() => {
     const compute = () => {
       const w = window.innerWidth;
@@ -46,6 +45,7 @@ const Offres: React.FC = () => {
       else if (w < 900) setCols(2);
       else setCols(3);
     };
+ 
     compute();
     window.addEventListener("resize", compute);
     return () => window.removeEventListener("resize", compute);
@@ -56,8 +56,6 @@ const Offres: React.FC = () => {
       try {
         setLoading(true);
  
-        // ✅ pubs actives, triées par date
-        // ⚠️ Si Firestore demande un index, crée-le via le lien dans la console
         const qy = query(
           collection(db, "ads"),
           where("active", "==", true),
@@ -69,18 +67,12 @@ const Offres: React.FC = () => {
         const data: Offre[] = snap.docs.map((d) => {
           const ad = d.data() as AdDoc;
  
-          const title = ad.title?.trim() || "Offre";
-          const imageUrl = ad.imageUrl?.trim() || "";
-          const link = ad.targetUrl?.trim() || "#";
- 
           return {
             id: d.id,
-            title,
-            // ✅ si tu ajoutes "desc" dans Firestore, il sera pris automatiquement
+            title: ad.title?.trim() || "Offre",
             desc: ad.desc?.trim() || "Cliquez pour voir l’offre.",
-            imageUrl,
-            link,
-            // ✅ si tu ajoutes "badge" dans Firestore, il sera pris automatiquement
+            imageUrl: ad.imageUrl?.trim() || "",
+            link: ad.targetUrl?.trim() || "#",
             badge: ad.badge?.trim() || "",
           };
         });
@@ -96,12 +88,23 @@ const Offres: React.FC = () => {
   }, []);
  
   const openLink = (url: string) => {
-    if (!url || url === "#") return;
-    window.open(url, "_blank", "noopener,noreferrer");
+    const cleanUrl = url.trim();
+ 
+    if (!cleanUrl || cleanUrl === "#") return;
+ 
+    if (!cleanUrl.startsWith("http://") && !cleanUrl.startsWith("https://")) {
+      window.open(`https://${cleanUrl}`, "_blank", "noopener,noreferrer");
+      return;
+    }
+ 
+    window.open(cleanUrl, "_blank", "noopener,noreferrer");
   };
  
   const hasData = useMemo(
-    () => offres.some((o) => Boolean(o.imageUrl) && Boolean(o.link) && o.link !== "#"),
+    () =>
+      offres.some(
+        (o) => Boolean(o.imageUrl) && Boolean(o.link) && o.link !== "#"
+      ),
     [offres]
   );
  
@@ -136,8 +139,10 @@ const Offres: React.FC = () => {
                 <div
                   style={{
                     ...styles.cover,
-                    backgroundImage: o.imageUrl ? `url(${o.imageUrl})` : "none",
-                    backgroundColor: o.imageUrl ? undefined : "rgba(255,255,255,0.06)",
+                    backgroundImage: o.imageUrl ? `url(${o.imageUrl.trim()})` : "none",
+                    backgroundColor: o.imageUrl
+                      ? undefined
+                      : "rgba(255,255,255,0.06)",
                   }}
                 >
                   {!o.imageUrl && <div style={styles.noImage}>Aucune image</div>}
@@ -189,12 +194,14 @@ const styles: Record<string, React.CSSProperties> = {
     padding: 0,
     color: "white",
   },
+ 
   cover: {
     height: 140,
     backgroundSize: "cover",
     backgroundPosition: "center",
     position: "relative",
   },
+ 
   noImage: {
     position: "absolute",
     inset: 0,
@@ -203,6 +210,7 @@ const styles: Record<string, React.CSSProperties> = {
     opacity: 0.75,
     fontWeight: 900,
   },
+ 
   badge: {
     position: "absolute",
     top: 10,
@@ -214,6 +222,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 999,
     fontWeight: 900,
   },
+ 
   body: { padding: 12 },
   cardTitle: { fontWeight: 900, marginBottom: 6 },
   desc: { opacity: 0.85, lineHeight: 1.4, marginBottom: 10 },

@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { collection, getDocs, orderBy, query, where, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../firebase/firebase";
  
 const GOLD = "#D4AF37";
@@ -10,18 +18,16 @@ const BORDER = "rgba(212,175,55,0.25)";
 type EventDoc = {
   title?: string;
   description?: string;
-  coverUrl?: string;   // image principale de l’event (si tu veux)
-  whatsapp?: string;   // numéro WhatsApp
+  coverUrl?: string;
+  whatsapp?: string;
   active?: boolean;
   createdAt?: any;
 };
  
 type UiHomeDoc = {
-  eventsCoverUrl?: string; // ✅ couverture HERO de la page événements
+  eventsCoverUrl?: string;
   eventsTitle?: string;
   eventsSubtitle?: string;
- 
-  // (au cas où tu veux aussi gérer offres)
   offersCoverUrl?: string;
 };
  
@@ -37,17 +43,31 @@ const Evenements: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<EventItem[]>([]);
   const [ui, setUi] = useState<UiHomeDoc>({});
+  const [cols, setCols] = useState(3);
+ 
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      if (w < 700) setCols(1);
+      else if (w < 1024) setCols(2);
+      else setCols(3);
+    };
+ 
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
  
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
  
-        // ✅ 1) Couverture HERO depuis ui/home
         const uiSnap = await getDoc(doc(db, "app_home", "nos_services"));
-        if (uiSnap.exists()) setUi(uiSnap.data() as UiHomeDoc);
+        if (uiSnap.exists()) {
+          setUi(uiSnap.data() as UiHomeDoc);
+        }
  
-        // ✅ 2) Events actifs depuis collection events
         const qy = query(
           collection(db, "events"),
           where("active", "==", true),
@@ -62,8 +82,8 @@ const Evenements: React.FC = () => {
             id: d.id,
             title: ev.title?.trim() || "Événement",
             description: ev.description?.trim() || "",
-            coverUrl: ev.coverUrl,
-            whatsapp: ev.whatsapp,
+            coverUrl: ev.coverUrl?.trim() || "",
+            whatsapp: ev.whatsapp?.trim() || "",
           };
         });
  
@@ -82,33 +102,39 @@ const Evenements: React.FC = () => {
   const heroSubtitle =
     ui.eventsSubtitle?.trim() ||
     "Mariage, fêtes, shooting… Des packs beauté & coiffure premium, gérés par Yaka.";
-  const heroCover = ui.eventsCoverUrl?.trim();
+ 
+  const heroCover = ui.eventsCoverUrl?.trim() || "";
  
   const openWhatsapp = (whatsappNumber?: string) => {
-    const number = (whatsappNumber || "").replace(/\D/g, ""); // garde que chiffres
-    if (!number) return alert("Numéro WhatsApp manquant (à configurer dans l’admin).");
+    const number = (whatsappNumber || "").replace(/\D/g, "");
+    if (!number) {
+      alert("Numéro WhatsApp manquant (à configurer dans l’admin).");
+      return;
+    }
  
     const message = encodeURIComponent(
       "Bonjour Yaka 👋 Je voudrais des infos sur l’Espace événementielle (mariage, fête, shooting)."
     );
  
-    window.open(`https://wa.me/${number}?text=${message}`, "_blank", "noopener,noreferrer");
+    window.open(
+      `https://wa.me/${number}?text=${message}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
   };
  
   const firstWhatsapp = useMemo(() => {
-    // si tu veux un bouton global, on prend le 1er event qui a un whatsapp
     const found = events.find((e) => !!e.whatsapp);
     return found?.whatsapp;
   }, [events]);
  
   return (
     <div style={styles.page}>
-      {/* Header */}
       <div
         style={{
           ...styles.hero,
           backgroundImage: heroCover ? `url(${heroCover})` : "none",
-          backgroundColor: heroCover ? undefined : "rgba(255,255,255,0.04)",
+          backgroundColor: heroCover ? undefined : "rgba(255,255,255,0.03)",
         }}
       >
         <div style={styles.overlay} />
@@ -118,56 +144,81 @@ const Evenements: React.FC = () => {
           <h1 style={styles.title}>{heroTitle}</h1>
           <p style={styles.subtitle}>{heroSubtitle}</p>
  
-          <button style={styles.whatsappBtn} onClick={() => openWhatsapp(firstWhatsapp)}>
-            Contacter sur WhatsApp →
-          </button>
+          <div style={styles.heroActions}>
+            <button
+              style={styles.whatsappBtn}
+              onClick={() => openWhatsapp(firstWhatsapp)}
+            >
+              Contacter sur WhatsApp →
+            </button>
+          </div>
  
           {!heroCover && (
-            <div style={{ marginTop: 10, opacity: 0.75, fontSize: 13 }}>
-              (Couverture non définie — à ajouter dans Firestore: ui/home → eventsCoverUrl)
+            <div style={styles.infoText}>
+              Aucune couverture définie pour cette page.
             </div>
           )}
         </div>
       </div>
  
-      {/* Contenu */}
       <div style={styles.container}>
         <section style={styles.section}>
-          <h2 style={styles.h2}>Événements / Packs</h2>
+          <div style={styles.sectionHead}>
+            <div>
+              <h2 style={styles.h2}>Événements / Packs</h2>
+              <p style={styles.sectionSubtitle}>
+                Découvrez les offres événementielles actuellement disponibles.
+              </p>
+            </div>
+          </div>
  
           {loading ? (
-            <div style={{ opacity: 0.85 }}>Chargement…</div>
+            <div style={styles.stateBox}>Chargement…</div>
           ) : events.length === 0 ? (
-            <div style={{ opacity: 0.85 }}>
-              Aucun événement actif pour le moment (à gérer dans le dashboard admin).
+            <div style={styles.stateBox}>
+              Aucun événement actif pour le moment.
             </div>
           ) : (
-            <div style={styles.grid3}>
+            <div
+              style={{
+                ...styles.grid,
+                gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+              }}
+            >
               {events.map((ev) => (
                 <div key={ev.id} style={styles.card}>
-                  <div style={styles.cardTitle}>{ev.title}</div>
-                  {!!ev.description && <div style={styles.cardText}>{ev.description}</div>}
- 
-                  <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
-                    {ev.whatsapp ? (
-                      <button style={styles.smallBtn} onClick={() => openWhatsapp(ev.whatsapp)}>
-                        WhatsApp →
-                      </button>
+                  <div style={styles.previewWrap}>
+                    {ev.coverUrl ? (
+                      <img
+                        src={ev.coverUrl}
+                        alt={ev.title}
+                        style={styles.previewImage}
+                      />
                     ) : (
-                      <div style={{ opacity: 0.7, fontSize: 13 }}>
-                        WhatsApp non défini
-                      </div>
+                      <div style={styles.noImage}>Aucune image</div>
                     )}
                   </div>
  
-                  {!!ev.coverUrl && (
-                    <div
-                      style={{
-                        ...styles.preview,
-                        backgroundImage: `url(${ev.coverUrl})`,
-                      }}
-                    />
-                  )}
+                  <div style={styles.cardBody}>
+                    <div style={styles.cardTitle}>{ev.title}</div>
+ 
+                    {!!ev.description && (
+                      <div style={styles.cardText}>{ev.description}</div>
+                    )}
+ 
+                    <div style={styles.cardFooter}>
+                      {ev.whatsapp ? (
+                        <button
+                          style={styles.smallBtn}
+                          onClick={() => openWhatsapp(ev.whatsapp)}
+                        >
+                          WhatsApp →
+                        </button>
+                      ) : (
+                        <div style={styles.mutedText}>WhatsApp non défini</div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -181,20 +232,36 @@ const Evenements: React.FC = () => {
 };
  
 const styles: Record<string, React.CSSProperties> = {
-  page: { background: BG, color: "white", minHeight: "100vh" },
+  page: {
+    background: BG,
+    color: "white",
+    minHeight: "100vh",
+  },
  
   hero: {
     position: "relative",
-    padding: "42px 18px 28px",
+    minHeight: 320,
+    padding: "42px 18px 32px",
     backgroundSize: "cover",
     backgroundPosition: "center",
+    display: "flex",
+    alignItems: "end",
   },
+ 
   overlay: {
     position: "absolute",
     inset: 0,
-    background: "linear-gradient(180deg, rgba(0,0,0,0.70), rgba(11,11,15,0.93))",
+    background:
+      "linear-gradient(180deg, rgba(0,0,0,0.50), rgba(11,11,15,0.92))",
   },
-  heroContent: { position: "relative", maxWidth: 980, margin: "0 auto" },
+ 
+  heroContent: {
+    position: "relative",
+    maxWidth: 980,
+    width: "100%",
+    margin: "0 auto",
+    zIndex: 1,
+  },
  
   badge: {
     display: "inline-block",
@@ -203,62 +270,165 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "8px 12px",
     borderRadius: 999,
     fontWeight: 900,
-    letterSpacing: 0.5,
+    letterSpacing: 0.6,
     color: GOLD,
-    marginBottom: 12,
+    marginBottom: 14,
+    backdropFilter: "blur(6px)",
   },
+ 
   title: {
     margin: 0,
-    fontSize: 32,
+    fontSize: "clamp(30px, 5vw, 52px)",
     fontWeight: 900,
-    textShadow: "0 2px 18px rgba(0,0,0,0.6)",
+    lineHeight: 1.05,
+    textShadow: "0 6px 24px rgba(0,0,0,0.45)",
   },
-  subtitle: { margin: "10px 0 16px", opacity: 0.9, maxWidth: 700 },
+ 
+  subtitle: {
+    margin: "12px 0 18px",
+    opacity: 0.92,
+    maxWidth: 760,
+    lineHeight: 1.6,
+    fontSize: 16,
+  },
+ 
+  heroActions: {
+    display: "flex",
+    gap: 10,
+    flexWrap: "wrap",
+    marginTop: 10,
+  },
  
   whatsappBtn: {
     background: GOLD,
     border: "none",
-    padding: "12px 14px",
-    borderRadius: 12,
+    padding: "12px 16px",
+    borderRadius: 14,
     fontWeight: 900,
     cursor: "pointer",
+    color: "black",
+    boxShadow: "0 10px 22px rgba(0,0,0,0.25)",
   },
  
-  container: { maxWidth: 980, margin: "0 auto", padding: 18 },
-  section: { marginTop: 18 },
-  h2: { margin: "0 0 10px", fontSize: 18, fontWeight: 900 },
+  infoText: {
+    marginTop: 12,
+    opacity: 0.72,
+    fontSize: 13,
+  },
  
-  grid3: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  container: {
+    maxWidth: 1100,
+    margin: "0 auto",
+    padding: "22px 18px",
+  },
+ 
+  section: {
+    marginTop: 6,
+  },
+ 
+  sectionHead: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "end",
     gap: 12,
+    marginBottom: 16,
   },
+ 
+  h2: {
+    margin: 0,
+    fontSize: 24,
+    fontWeight: 900,
+  },
+ 
+  sectionSubtitle: {
+    margin: "6px 0 0",
+    opacity: 0.74,
+    lineHeight: 1.5,
+  },
+ 
+  stateBox: {
+    background: CARD,
+    border: `1px solid ${BORDER}`,
+    borderRadius: 18,
+    padding: 18,
+    opacity: 0.88,
+  },
+ 
+  grid: {
+    display: "grid",
+    gap: 16,
+  },
+ 
   card: {
     background: CARD,
     border: `1px solid ${BORDER}`,
-    borderRadius: 16,
-    padding: 14,
+    borderRadius: 20,
+    overflow: "hidden",
+    boxShadow: "0 12px 28px rgba(0,0,0,0.18)",
   },
-  cardTitle: { fontWeight: 900, marginBottom: 6, color: "white" },
-  cardText: { opacity: 0.85, lineHeight: 1.4 },
+ 
+  previewWrap: {
+    position: "relative",
+    height: 220,
+    background: "rgba(255,255,255,0.04)",
+  },
+ 
+  previewImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    display: "block",
+  },
+ 
+  noImage: {
+    position: "absolute",
+    inset: 0,
+    display: "grid",
+    placeItems: "center",
+    opacity: 0.75,
+    fontWeight: 900,
+  },
+ 
+  cardBody: {
+    padding: 16,
+  },
+ 
+  cardTitle: {
+    fontWeight: 900,
+    marginBottom: 8,
+    color: "white",
+    fontSize: 18,
+    lineHeight: 1.2,
+  },
+ 
+  cardText: {
+    opacity: 0.86,
+    lineHeight: 1.55,
+    minHeight: 60,
+  },
+ 
+  cardFooter: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+    marginTop: 16,
+    flexWrap: "wrap",
+  },
  
   smallBtn: {
     background: "transparent",
     border: `1px solid ${BORDER}`,
     color: "white",
-    padding: "10px 12px",
+    padding: "10px 14px",
     borderRadius: 12,
     fontWeight: 900,
     cursor: "pointer",
   },
  
-  preview: {
-    marginTop: 12,
-    height: 140,
-    borderRadius: 14,
-    border: `1px solid ${BORDER}`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+  mutedText: {
+    opacity: 0.68,
+    fontSize: 13,
   },
 };
  
