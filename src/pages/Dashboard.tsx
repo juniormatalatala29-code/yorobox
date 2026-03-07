@@ -635,7 +635,7 @@ const Dashboard: React.FC = () => {
  
             <Card
               title="Galerie"
-              desc="Tu peux ajouter jusqu’à 15 images (par lots de 6)."
+              desc="Tu peux ajouter jusqu’à 15 images (par lots de 5)."
             >
               <div
                 style={{
@@ -659,7 +659,7 @@ const Dashboard: React.FC = () => {
                 </label>
  
                 <span style={{ opacity: 0.85, fontSize: 13 }}>
-                  {form.gallery?.length || 0}/12
+                  {form.gallery?.length || 0}/15
                 </span>
               </div>
  
@@ -731,7 +731,7 @@ const Dashboard: React.FC = () => {
  
             <div style={{ display: "grid", gap: 10 }}>
               {(form.tarifs || []).length === 0 && (
-                <div style={{ opacity: 0.85 }}>Aucun tarif. Ajoute-en un.</div>
+                <div style={{ opacity: 0.85 }}>Aucun tarif. Ajoute - un.</div>
               )}
  
               {(form.tarifs || []).map((t, i) => (
@@ -800,7 +800,7 @@ const Dashboard: React.FC = () => {
             <div style={{ display: "grid", gap: 10 }}>
               {(form.catalogue || []).length === 0 && (
                 <div style={{ opacity: 0.85 }}>
-                  Aucun produit. Ajoute-en un si tu veux.
+                  Aucun produit. Ajoute - un si tu veux.
                 </div>
               )}
  
