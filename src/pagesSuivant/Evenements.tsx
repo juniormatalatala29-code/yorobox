@@ -241,7 +241,7 @@ const styles: Record<string, React.CSSProperties> = {
   hero: {
     position: "relative",
     minHeight: 320,
-    padding: "42px 18px 32px",
+    padding: "60px 18px 32px",
     backgroundSize: "cover",
     backgroundPosition: "center",
     display: "flex",

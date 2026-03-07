@@ -307,7 +307,7 @@ const NosServices: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   page: { background: BG, color: "white", minHeight: "100vh" },
  
-  hero: { position: "relative", padding: "42px 18px 28px", backgroundSize: "cover", backgroundPosition: "center" },
+  hero: { position: "relative", padding: "60px 18px 28px", backgroundSize: "cover", backgroundPosition: "center" },
   overlay: { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.70), rgba(11,11,15,0.90))" },
   heroContent: { position: "relative", maxWidth: 980, margin: "0 auto" },
   title: { margin: 0, fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 800, letterSpacing: 0.3, textShadow: "0 2px 18px rgba(0,0,0,0.6)" },

@@ -175,7 +175,7 @@ const styles: Record<string, React.CSSProperties> = {
  
   container: { maxWidth: 1080, margin: "0 auto", padding: 18 },
  
-  header: { marginBottom: 16 },
+  header: { marginBottom: 16, marginTop: 50 },
  
   title: { margin: 0, fontSize: 28, fontWeight: 900 },
  
