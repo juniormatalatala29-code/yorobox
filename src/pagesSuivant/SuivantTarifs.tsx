@@ -68,7 +68,7 @@ const NosServices: React.FC = () => {
   // ✅ Valeurs par défaut (si Firestore vide)
   const [covers, setCovers] = useState<HomeCovers>({
     offersTitle: "Offres du Moment",
-    offersSubtitle: "Promotions et publicités (gérées par le dashboard admin).",
+    offersSubtitle: "Promotions et publicités.",
     eventsTitle: "Espace événementielle",
     eventsSubtitle: "Mariage, fêtes, shooting… Un espace “Yaka” avec photos, produits, services.",
     offersCoverUrl: "",
@@ -211,7 +211,7 @@ const NosServices: React.FC = () => {
         <div style={styles.cardWide}>
           <div>
             <h2 style={styles.h2}>{covers.offersTitle || "Offres du Moment"}</h2>
-            <p style={styles.p}>{covers.offersSubtitle || "Promotions et publicités (gérées par le dashboard admin)."}</p>
+            <p style={styles.p}>{covers.offersSubtitle || "Promotions et publicités."}</p>
             <button style={styles.cta} onClick={() => navigate("/offres")}>
               Voir les offres →
             </button>
@@ -232,7 +232,7 @@ const NosServices: React.FC = () => {
       {/* Premium salons */}
       <section style={styles.section}>
         <div style={styles.sectionHead}>
-          <h2 style={styles.h2}>Nos Salons (Premium)</h2>
+          <h2 style={styles.h2}>Nos Salons</h2>
           <button style={styles.linkBtn} onClick={() => navigate("/salons")}>
             Voir tout →
           </button>

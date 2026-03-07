@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
  
@@ -29,6 +29,8 @@ const DEFAULT_WHATSAPP = "243977506981";
  
 const SalonDetail: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+ 
   const [salon, setSalon] = useState<SalonDoc | null>(null);
   const [loading, setLoading] = useState(true);
  
@@ -94,6 +96,39 @@ const SalonDetail: React.FC = () => {
  
   const banner = salon.bannerImage || "";
   const avatar = salon.profileImage || salon.bannerImage || "";
+ 
+  const cleanWhatsapp = whatsapp.replace(/\D/g, "");
+ 
+  const orderMessage = encodeURIComponent(
+    `Bonjour ${name} 👋,\n\nJe souhaite passer une commande / réserver un service chez vous.\n\nSalon : ${name}\nVille : ${city}\n\nVoici ma demande : `
+  );
+ 
+  const reviewMessage = encodeURIComponent(
+    `Bonjour ${name} 👋,\n\nJe souhaite vous faire part de mon avis concernant mon expérience dans votre salon.\n\nSalon : ${name}\nVille : ${city}\n\nMon avis : `
+  );
+ 
+  const handleCommander = () => {
+    if (plan === "standard") {
+      navigate("/formulaire");
+      return;
+    }
+ 
+    window.open(
+      `https://wa.me/${cleanWhatsapp}?text=${orderMessage}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+ 
+  const handleAvis = () => {
+    if (!canReview) return;
+ 
+    window.open(
+      `https://wa.me/${cleanWhatsapp}?text=${reviewMessage}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
  
   return (
     <div className={`detail-page ${plan}`}>
@@ -202,14 +237,14 @@ const SalonDetail: React.FC = () => {
         </section>
  
         <div className="detail-actions">
-          <button className="btn-primary" type="button">
+          <button className="btn-primary" type="button" onClick={handleCommander}>
             Commander
           </button>
  
           {canWhatsApp && (
             <a
               className="btn-secondary"
-              href={`https://wa.me/${whatsapp}`}
+              href={`https://wa.me/${cleanWhatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -218,7 +253,7 @@ const SalonDetail: React.FC = () => {
           )}
  
           {canReview && (
-            <button className="btn-tertiary" type="button">
+            <button className="btn-tertiary" type="button" onClick={handleAvis}>
               Nous laisser un avis
             </button>
           )}
