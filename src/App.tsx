@@ -51,6 +51,7 @@ const AppContent: React.FC = () => {
       location.pathname === "/offres" ||
       location.pathname === "/evenements" ||
       location.pathname === "/SuivantTarifs" ||
+      location.pathname === "/formulaire" ||
       location.pathname.startsWith("/salon/")
     );
  
@@ -65,21 +66,28 @@ const AppContent: React.FC = () => {
       )}
  
       <Routes>
+        {/* 🌍 Pages publiques */}
         <Route path="/" element={<Accueil />} />
         <Route path="/salons" element={<Salons />} />
         <Route path="/salon/:id" element={<SalonDetail />} />
         <Route path="/tarifs" element={<Tarifs />} />
         <Route path="/nouscontacter" element={<Nouscontacter />} />
         <Route path="/contact" element={<Contact />} />
+ 
+        {/* ➡️ Pages suivantes */}
         <Route path="/suivanttarifs" element={<SuivantTarifs />} />
         <Route path="/formulaire" element={<Formulaire />} />
         <Route path="/finmessage" element={<Finmessage />} />
+ 
+        {/* 🟨 Nos services */}
         <Route path="/evenements" element={<Evenements />} />
         <Route path="/offres" element={<Offres />} />
  
+        {/* 🔐 Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
  
+        {/* 🔒 Dashboard protégé */}
         <Route
           path="/dashboard/*"
           element={

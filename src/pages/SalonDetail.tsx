@@ -5,7 +5,7 @@ import { db } from "../firebase/firebase";
  
 import "../styles/detail.css";
  
-type SubscriptionType = "standard" | "vip" | "premium";
+type SubscriptionType = "free" | "vip" | "premium";
  
 type SalonDoc = {
   salonName?: string;
@@ -57,7 +57,7 @@ const SalonDetail: React.FC = () => {
   }, [id]);
  
   const plan = useMemo<SubscriptionType>(() => {
-    return (salon?.subscriptionType || "standard") as SubscriptionType;
+    return (salon?.subscriptionType || "free") as SubscriptionType;
   }, [salon]);
  
   const canWhatsApp = plan === "premium" || plan === "vip";
@@ -108,7 +108,7 @@ const SalonDetail: React.FC = () => {
   );
  
   const handleCommander = () => {
-    if (plan === "standard") {
+    if (plan === "free") {
       navigate("/formulaire");
       return;
     }
