@@ -5,7 +5,7 @@ import { db } from "../firebase/firebase";
 
 import "../styles/detail.css";
 
-type SubscriptionType = "free" | "vip" | "premium";
+type SubscriptionType = "standard" |"free" | "vip" | "premium";
 
 type SalonDoc = {
   salonName?: string;
@@ -60,7 +60,7 @@ const SalonDetail: React.FC = () => {
   }, [id]);
 
   const plan = useMemo<SubscriptionType>(() => {
-    return (salon?.subscriptionType || "free") as SubscriptionType;
+    return (salon?.subscriptionType || "free"|| "standard") as SubscriptionType;
   }, [salon]);
 
   const canWhatsApp = plan === "premium" || plan === "vip";
@@ -107,12 +107,12 @@ const SalonDetail: React.FC = () => {
   );
 
   const reviewMessage = encodeURIComponent(
-    `Bonjour ${name} 👋,\n\nJe souhaite vous faire part de mon avis concernant mon expérience dans votre salon.\n\nSalon : ${name}\nVille : ${city}\n\nMon avis : `
+    `Bonjour (bonsoir) ${name} 👋,\n\nJe souhaite vous faire part de mon avis concernant mon expérience dans votre salon.\n\nSalon : ${name}\nVille : ${city}\n\nMon avis : `
   );
 
   const handleCommander = () => {
     // ✅ FREE = formulaire uniquement
-    if (plan === "free") {
+    if (plan === "free"|| plan === "standard") {
       navigate("/formulaire");
       return;
     }
