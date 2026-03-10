@@ -150,7 +150,7 @@ const Evenements: React.FC = () => {
               style={styles.whatsappBtn}
               onClick={() => openWhatsapp(YAKA_WHATSAPP)}
             >
-              Contacter sur WhatsApp →
+              Nous contacter sur WhatsApp →
             </button>
           </div>
  
