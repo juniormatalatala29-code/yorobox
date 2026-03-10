@@ -2,41 +2,44 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
- 
+
 import "../styles/detail.css";
- 
+
 type SubscriptionType = "free" | "vip" | "premium";
- 
+
 type SalonDoc = {
   salonName?: string;
   bio?: string;
   city?: string;
   horaires?: string;
- 
+
   subscriptionType?: SubscriptionType;
- 
+
   bannerImage?: string;
   profileImage?: string;
- 
+
   gallery?: string[];
   tarifs?: Array<{ service: string; price: string }>;
   catalogue?: Array<{ produit: string; price: string }>;
- 
+
   whatsapp?: string;
 };
- 
+
 const DEFAULT_WHATSAPP = "243977506981";
- 
+
 const SalonDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
- 
+
   const [salon, setSalon] = useState<SalonDoc | null>(null);
   const [loading, setLoading] = useState(true);
- 
+
   // avis premium only
   const [rating, setRating] = useState<number>(0);
- 
+
+  // ✅ image ouverte en grand
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -55,15 +58,15 @@ const SalonDetail: React.FC = () => {
     };
     load();
   }, [id]);
- 
+
   const plan = useMemo<SubscriptionType>(() => {
     return (salon?.subscriptionType || "free") as SubscriptionType;
   }, [salon]);
- 
+
   const canWhatsApp = plan === "premium" || plan === "vip";
   const canReview = plan === "premium";
   const canCatalogue = plan === "premium";
- 
+
   if (loading) {
     return (
       <div className={`detail-page ${plan}`}>
@@ -73,7 +76,7 @@ const SalonDetail: React.FC = () => {
       </div>
     );
   }
- 
+
   if (!salon) {
     return (
       <div className="detail-page standard">
@@ -83,53 +86,53 @@ const SalonDetail: React.FC = () => {
       </div>
     );
   }
- 
+
   const name = salon.salonName || "Salon";
   const city = salon.city || "Kinshasa";
   const bio = salon.bio || "Salon de coiffure & beauté.";
   const horaires = salon.horaires || "Horaires non renseignés";
   const whatsapp = salon.whatsapp || DEFAULT_WHATSAPP;
- 
+
   const tarifs = salon.tarifs || [];
   const catalogue = salon.catalogue || [];
   const gallery = salon.gallery || [];
- 
+
   const banner = salon.bannerImage || "";
   const avatar = salon.profileImage || salon.bannerImage || "";
- 
+
   const cleanWhatsapp = whatsapp.replace(/\D/g, "");
- 
+
   const orderMessage = encodeURIComponent(
-    `Bonjour ${name} 👋,\n\nJe souhaite passer une commande / réserver un service chez vous.\n\nSalon : ${name}\nVille : ${city}\n\nVoici ma demande : `
+    `Bonjour (bonsoir) ${name} 👋,\n\nJe souhaite passer une commande / réserver un service chez vous.\n\nSalon : ${name}\nVille : ${city}\n\nVoici ma demande : `
   );
- 
+
   const reviewMessage = encodeURIComponent(
     `Bonjour ${name} 👋,\n\nJe souhaite vous faire part de mon avis concernant mon expérience dans votre salon.\n\nSalon : ${name}\nVille : ${city}\n\nMon avis : `
   );
- 
+
   const handleCommander = () => {
+    // ✅ FREE = formulaire uniquement
     if (plan === "free") {
       navigate("/formulaire");
       return;
     }
- 
+
     window.open(
       `https://wa.me/${cleanWhatsapp}?text=${orderMessage}`,
       "_blank",
       "noopener,noreferrer"
     );
   };
- 
+
   const handleAvis = () => {
     if (!canReview) return;
- 
-    window.open(
-      `https://wa.me/${cleanWhatsapp}?text=${reviewMessage}`,
+
+    window.open(      `https://wa.me/${cleanWhatsapp}?text=${reviewMessage}`,
       "_blank",
       "noopener,noreferrer"
     );
   };
- 
+
   return (
     <div className={`detail-page ${plan}`}>
       <div className="detail-bannerWrap">
@@ -138,9 +141,9 @@ const SalonDetail: React.FC = () => {
         ) : (
           <div className="detail-bannerPlaceholder" />
         )}
- 
+
         <div className="detail-bannerShade" />
- 
+
         <div className="detail-headerOverlay">
           <div className="detail-avatarWrap">
             {avatar ? (
@@ -149,118 +152,146 @@ const SalonDetail: React.FC = () => {
               <div className="detail-avatarPlaceholder" />
             )}
           </div>
- 
+
           <div className="detail-headerText">
             <h1 className="detail-title">{name}</h1>
             <p className="detail-city">{city}</p>
           </div>
- 
+
           <span className={`detail-badge ${plan}`}>{plan.toUpperCase()}</span>
         </div>
       </div>
- 
+
+      
+
       <div className="detail-card">
-        {/* ⭐ étoiles visibles, mais cliquables uniquement premium */}
-        <div className="detail-stars">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <button
-              key={star}
-              type="button"
-              className={`star ${star <= rating ? "active" : ""} ${
-                canReview ? "clickable" : "locked"
-              }`}
-              onClick={() => canReview && setRating(star)}
-              disabled={!canReview}
-              aria-label={`Donner ${star} étoiles`}
-            >
-              ★
-            </button>
-          ))}
-        </div>
- 
-        <section className="detail-section">
-          <h3>À propos</h3>
-          <p className="detail-text">{bio}</p>
-        </section>
- 
-        <section className="detail-section">
-          <h3>Horaires</h3>
-          <p className="detail-text">{horaires}</p>
-        </section>
- 
-        <section className="detail-section">
-          <h3>Tarifs</h3>
-          {tarifs.length === 0 ? (
-            <p className="detail-muted">Aucun tarif renseigné.</p>
-          ) : (
-            <div className="detail-rows">
-              {tarifs.map((t, i) => (
-                <div key={i} className="detail-row">
-                  <span className="row-left">{t.service}</span>
-                  <span className="row-right">{t.price}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
- 
-        {/* ✅ Catalogue seulement si premium (sinon on NE MONTRE RIEN au client) */}
-        {canCatalogue && (
-          <section className="detail-section">
-            <h3>Catalogue</h3>
-            {catalogue.length === 0 ? (
-              <p className="detail-muted">Aucun produit renseigné.</p>
-            ) : (
-              <div className="detail-rows">
-                {catalogue.map((c, i) => (
-                  <div key={i} className="detail-row">
-                    <span className="row-left">{c.produit}</span>
-                    <span className="row-right">{c.price}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
- 
-        <section className="detail-section">
-          <h3>Galerie</h3>
-          {gallery.length === 0 ? (
-            <p className="detail-muted">Aucune image pour le moment.</p>
-          ) : (
-            <div className="detail-gallery">
-              {gallery.map((img, i) => (
-                <img key={i} src={img} alt={`Réalisation ${i + 1}`} />
-              ))}
-            </div>
-          )}
-        </section>
- 
-        <div className="detail-actions">
-          <button className="btn-primary" type="button" onClick={handleCommander}>
-            Commander
-          </button>
- 
-          {canWhatsApp && (
-            <a
-              className="btn-secondary"
-              href={`https://wa.me/${cleanWhatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Écrire sur WhatsApp
-            </a>
-          )}
- 
-          {canReview && (
-            <button className="btn-tertiary" type="button" onClick={handleAvis}>
-              Nous laisser un avis
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+        {/* ⭐ étoiles visibles, mais cliquables uniquement premium */}
+        <div className="detail-stars">
+          {[1, 2, 3, 4, 5].map((star) => (
+           <button
+              key={star}
+              type="button"
+             className={`star ${star <= rating ? "active" : ""} ${
+                canReview ? "clickable" : "locked"
+              }`}
+              onClick={() => canReview && setRating(star)}
+              disabled={!canReview}
+              aria-label={`Donner ${star} étoiles`}
+            >
+              ★
+            </button>
+          ))}
+        </div>
+
+        <section className="detail-section">
+          <h3>À propos</h3>
+          <p className="detail-text">{bio}</p>
+        </section>
+
+        <section className="detail-section">
+          <h3>Horaires</h3>
+          <p className="detail-text">{horaires}</p>
+        </section>
+
+        <section className="detail-section">
+          <h3>Tarifs</h3>
+          {tarifs.length === 0 ? (
+            <p className="detail-muted">Aucun tarif renseigné.</p>
+          ) : (
+            <div className="detail-rows">
+              {tarifs.map((t, i) => (
+                <div key={i} className="detail-row">
+                  <span className="row-left">{t.service}</span>
+                  <span className="row-right">{t.price}</span>
+                </div>
+              ))}
+ </div>
+          )}
+ </section>
+
+        {/* ✅ Catalogue seulement si premium */}
+        {canCatalogue && (
+          <section className="detail-section">
+ <h3>Catalogue</h3>
+ {catalogue.length === 0 ? (
+              <p className="detail-muted">Aucun produit renseigné.</p>
+            ) : (
+              <div className="detail-rows">
+                {catalogue.map((c, i) => (
+                  <div key={i} className="detail-row">
+                    <span className="row-left">{c.produit}</span>
+                    <span className="row-right">{c.price}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        <section className="detail-section">
+          <h3>Galerie</h3>
+          {gallery.length === 0 ? (
+            <p className="detail-muted">Aucune image pour le moment.</p>
+          ) : (
+            <div className="detail-gallery">
+              {gallery.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`Réalisation ${i + 1}`}
+                  onClick={() => setSelectedImage(img)}
+                  style={{ cursor: "zoom-in" }}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+
+        <div className="detail-actions">
+          <button className="btn-primary" type="button" onClick={handleCommander}>
+            Commander
+          </button>
+
+          {canWhatsApp && (
+            <a
+              className="btn-secondary"
+              href={`https://wa.me/${cleanWhatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Écrire sur WhatsApp
+            </a>
+          )}
+
+          {canReview && (
+            <button className="btn-tertiary" type="button" onClick={handleAvis}>
+              Nous laisser un avis
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ✅ Image ouverte en grand */}
+      {selectedImage && (
+        <div className="image-modal" onClick={() => setSelectedImage(null)}>
+          <button
+            type="button"
+            className="image-modal-close"
+            onClick={() => setSelectedImage(null)}
+          >
+            ×
+          </button>
+
+          <img
+            src={selectedImage}
+            alt="Image en grand"
+            className="image-modal-img"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </div>
+  );
 };
- 
+
 export default SalonDetail;

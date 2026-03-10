@@ -38,7 +38,7 @@ html, body {
   z-index: -1;
 }
 
-/* ===== HEADER ===== */
+/* HEADER  */
 .accueil-header {
   display: flex;
   align-items: flex-start;
@@ -46,7 +46,7 @@ html, body {
   z-index: 1;
 }
 
-/* ===== TITRES ===== */
+/* TITRES */
 .title-container {
   display: flex;
   flex-direction: column;
@@ -76,7 +76,7 @@ html, body {
   line-height: 1.25;
 }
 
-/* ===== SECTION BAS FIXE ===== */
+/* SECTION BAS FIXE  */
 .bottom-section {
   position: fixed; /* empêche tout scroll */
   bottom: 1rem;
@@ -90,7 +90,7 @@ html, body {
   z-index: 2;
 }
 
-/* ===== BOUTON ===== */
+/*  BOUTON  */
 .cta-button {
   background: linear-gradient(90deg, #d4af37, #ffd700);
   color: #fff;
@@ -108,7 +108,7 @@ html, body {
   transform: scale(1.03);
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 .accueil-footer {
   color: #d1d1d1;
   font-size: 0.82rem;

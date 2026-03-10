@@ -39,5 +39,4 @@ const FinMessage: React.FC = () => {
     </div>
   );
 };
-
 export default FinMessage;
