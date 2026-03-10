@@ -14,6 +14,7 @@ const GOLD = "#D4AF37";
 const BG = "#0B0B0F";
 const CARD = "rgba(255,255,255,0.06)";
 const BORDER = "rgba(212,175,55,0.25)";
+const YAKA_WHATSAPP = "243977506981";
  
 type EventDoc = {
   title?: string;
@@ -147,7 +148,7 @@ const Evenements: React.FC = () => {
           <div style={styles.heroActions}>
             <button
               style={styles.whatsappBtn}
-              onClick={() => openWhatsapp(firstWhatsapp)}
+              onClick={() => openWhatsapp(YAKA_WHATSAPP)}
             >
               Contacter sur WhatsApp →
             </button>
