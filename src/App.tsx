@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import SplashScreen from "./components/SplashScreen";
  
 import "./styles/global.css";
  
@@ -26,6 +27,15 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const AppContent: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 1800);
+
+    return () => clearTimeout(timer);
+  }, []);
  
   const hideMenuOn = [
     "/suivanttarifs",
@@ -54,6 +64,10 @@ const AppContent: React.FC = () => {
       location.pathname === "/formulaire" ||
       location.pathname.startsWith("/salon/")
     );
+
+  if (showSplash) {
+    return <SplashScreen />;
+  }
  
   return (
     <>
