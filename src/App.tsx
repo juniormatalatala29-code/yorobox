@@ -30,12 +30,17 @@ const AppContent: React.FC = () => {
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
+    if (location.pathname !== "/") {
+      setShowSplash(false);
+      return;
+    }
+
     const timer = setTimeout(() => {
       setShowSplash(false);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [location.pathname]);
  
   const hideMenuOn = [
     "/suivanttarifs",
@@ -65,7 +70,7 @@ const AppContent: React.FC = () => {
       location.pathname.startsWith("/salon/")
     );
 
-  if (showSplash) {
+  if (showSplash && location.pathname === "/") {
     return <SplashScreen />;
   }
  
