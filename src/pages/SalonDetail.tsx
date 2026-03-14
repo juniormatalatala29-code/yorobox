@@ -113,7 +113,12 @@ const SalonDetail: React.FC = () => {
   const handleCommander = () => {
     // ✅ FREE = formulaire uniquement
     if (plan === "free"|| plan === "standard") {
-      navigate("/formulaire");
+      navigate("/formulaire", {
+        state: {
+          salonName: name,
+          salonCity: city,
+        },
+      });
       return;
     }
 

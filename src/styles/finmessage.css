@@ -1,55 +1,123 @@
-.finmessage-root {
-  max-width: 700px;
-  margin: 3rem auto;
-  padding: 2rem;
-  background: #131212;
-  border-radius: 15px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  font-family: Arial, sans-serif;
-  color: #fff;
-  text-align: center;
+.yakaSuccess-root {
+  min-height: 100vh;
+  padding: 40px 16px;
+  background: transparent;
 }
 
-.finmessage-root h1 {
-  color: #d4af37;
-  margin-bottom: 1rem;
+.yakaSuccess-shell {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 32px;
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  background: rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  box-shadow: 0 20px 70px rgba(0,0,0,0.28);
+
+  padding: 40px 30px;
 }
 
-.finmessage-root p {
-  font-size: 1.1rem;
-  margin: 0.8rem 0;
+.yakaSuccess-glow,
+.yakaSuccess-reflection{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
 }
 
-.finmessage-root ul {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
-  text-align: left;
+.yakaSuccess-glow{
+  background: radial-gradient(circle at top left,
+    rgba(255,215,120,0.15),
+    transparent 30%);
 }
 
-.finmessage-root li {
-  margin-bottom: 0.5rem;
+.yakaSuccess-reflection{
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.12),
+    rgba(255,255,255,0.03),
+    transparent 60%
+  );
 }
 
-.cta-button {
-  margin-top: 1.5rem;
-  padding: 0.9rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 25px;
-  border: none;
-  cursor: pointer;
-  background-color:linear-gradient(90deg, #d4af37, #ffd700);
-  color: #fff;
-  transition: transform 0.2s ease;
+.yakaSuccess-content{
+  position:relative;
+  z-index:1;
+  text-align:center;
 }
 
-.cta-button:hover {
-  transform: scale(1.05);
+.yakaSuccess-title{
+  font-size:32px;
+  color:#d4af37;
+  font-weight:800;
+  margin-bottom:14px;
 }
 
-.finmessage-root a {
-  color: #d4af37;
-  text-decoration: underline;
-  font-weight: 600;
+.yakaSuccess-text{
+  font-size:15px;
+  color:rgba(255,255,255,0.8);
+  margin-bottom:24px;
+}
+
+.yakaSuccess-card{
+  background: rgba(255,255,255,0.05);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:24px;
+  text-align:left;
+}
+
+.yakaSuccess-card h3{
+  color:#d4af37;
+  margin-bottom:10px;
+}
+
+.yakaSuccess-card ul{
+  list-style:none;
+  padding:0;
+}
+
+.yakaSuccess-card li{
+  margin-bottom:6px;
+  font-size:14px;
+}
+
+.yakaSuccess-contact{
+  margin-bottom:22px;
+}
+
+.yakaSuccess-contact a{
+  color:#d4af37;
+  font-weight:700;
+  margin-left:6px;
+}
+
+.yakaSuccess-button{
+  min-height:54px;
+
+  border:none;
+  border-radius:18px;
+
+  padding:0 24px;
+
+  font-size:15px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  background: linear-gradient(135deg,#d4af37 0%,#f0d27a 100%);
+  color:#111116;
+
+  box-shadow:0 12px 32px rgba(212,175,55,0.24);
+
+  transition:transform .25s ease;
+}
+
+.yakaSuccess-button:hover{
+  transform:translateY(-2px);
 }

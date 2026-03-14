@@ -12,7 +12,9 @@ const Contact: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -21,11 +23,33 @@ const Contact: React.FC = () => {
     setLoading(true);
 
     try {
-      const serviceID = "serviceforme";       // la partie id Service ID EmailJS
-      const templateID = "template_lzq8cxr"; // la partie Template ID EmailJS
-      const publicKey = "1bPAlD1HQQKCWO5uP"; // ma clé publique
+      const serviceID = "serviceforme";
+      const templateID = "template_lzq8cxr";
+      const publicKey = "1bPAlD1HQQKCWO5uP";
 
-      const result = await emailjs.send(serviceID, templateID, formData, publicKey);
+      const payload = {
+        salonName: "Demande de contact YAKA",
+        salonCity: "",
+        nomComplet: formData.name,
+        commune: "",
+        quartier: "",
+        avenue: "",
+        reference: formData.message,
+        email: formData.email,
+        whatsapp: formData.nember,
+        nbPersonnes: "",
+        date: "",
+        heure: "",
+        photoModeleNom: "",
+        photoModeleUrl: "",
+      };
+
+      const result = await emailjs.send(
+        serviceID,
+        templateID,
+        payload,
+        publicKey
+      );
 
       console.log("✅ Email envoyé :", result.text);
       alert("Merci ! Votre message a été envoyé.");
@@ -40,47 +64,69 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="contact-root">
-      <h1 className="contact-title">Nous Contacter</h1>
-      <p className="contact-subtitle">Envoyez-nous un message !</p>
+    <div className="yakaContact-root">
+      <div className="yakaContact-shell">
+        <div className="yakaContact-glow" />
+        <div className="yakaContact-reflection" />
 
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Votre nom"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Votre email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="nember"
-          placeholder="Votre numéro WhatsApp"
-          value={formData.nember}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="message"
-          placeholder="Votre message"
-          value={formData.message}
-          onChange={handleChange}
-          required
-          rows={5}
-        />
-        <button type="submit" className="contact-button" disabled={loading}>
-          {loading ? "Envoi..." : "Envoyer"}
-        </button>
-      </form>
+        <div className="yakaContact-head">
+          <div className="yakaContact-badge">YAKA</div>
+          <h1 className="yakaContact-title">Nous contacter</h1>
+          <p className="yakaContact-subtitle">
+            Envoyez-nous un message et nous vous répondrons dès que possible.
+          </p>
+        </div>
+
+        <form className="yakaContact-form" onSubmit={handleSubmit}>
+          <input
+            className="yakaContact-input"
+            type="text"
+            name="name"
+            placeholder="Votre nom"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            className="yakaContact-input"
+            type="email"
+            name="email"
+            placeholder="Votre email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            className="yakaContact-input"
+            type="text"
+            name="nember"
+            placeholder="Votre numéro WhatsApp"
+            value={formData.nember}
+            onChange={handleChange}
+            required
+          />
+
+          <textarea
+            className="yakaContact-input yakaContact-textarea"
+            name="message"
+            placeholder="Votre message"
+            value={formData.message}
+            onChange={handleChange}
+            required
+            rows={5}
+          />
+
+          <button
+            type="submit"
+            className="yakaContact-button"
+            disabled={loading}
+          >
+            {loading ? "Envoi..." : "Envoyer"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
