@@ -391,7 +391,7 @@ function YakaFooter() {
 }
  
 const styles: Record<string, React.CSSProperties> = {
-  page: { background: BG, color: "white", minHeight: "100vh" },
+  page: { background: BG, color: "white", minHeight: "100vh", overflowY:"auto",},
  
   hero: { position: "relative", padding: "60px 18px 28px", backgroundSize: "cover", backgroundPosition: "center" },
   overlay: { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.70), rgba(11,11,15,0.90))" },

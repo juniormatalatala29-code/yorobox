@@ -8,8 +8,8 @@
   --text-muted:#d1d1d1;
   --radius:12px;
   --shadow: 0 4px 10px rgba(0,0,0,0.2);
-  min-height: 100vh;
   background: #000;
+  overflow: hidden;
 }
 
 /* ✅ Base globale (ne casse pas tes cards) */
@@ -21,12 +21,13 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #fff;
-  background:transparent;
+  background: transparent;
 }
 
 /* Root prend toute la hauteur disponible */
 #root {
-  min-height: 100vh;
+  min-height: 100%;
+  
 }
 
 /* Liens & boutons (safe) */
