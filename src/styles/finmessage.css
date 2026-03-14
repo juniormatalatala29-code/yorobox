@@ -2,6 +2,7 @@
   min-height: 100vh;
   padding: 40px 16px;
   background: transparent;
+  overflow: hidden;
 }
 
 .yakaSuccess-shell {

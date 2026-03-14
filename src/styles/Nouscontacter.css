@@ -2,6 +2,7 @@
   min-height: 100vh;
   padding: 34px 16px 56px;
   background: transparent;
+  overflow: hidden;
 }
 
 .yakaContact-shell {
