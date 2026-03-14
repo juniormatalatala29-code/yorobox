@@ -12,6 +12,7 @@ import Contact from "./pages/Contact";
 import Nouscontacter from "./pages/Nouscontacter";
 import Salons from "./pages/Salons";
 import SalonDetail from "./pages/SalonDetail";
+
  
 import SuivantTarifs from "./pagesSuivant/SuivantTarifs";
 import Formulaire from "./pagesSuivant/formulaire";
@@ -23,6 +24,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PolitiqueConfidentialite from './pages/PolitiqueConfidentialite';
+import ConditionsUtilisation from './pages/ConditionsUtilisation';
  
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -67,6 +70,8 @@ const AppContent: React.FC = () => {
       location.pathname === "/evenements" ||
       location.pathname === "/SuivantTarifs" ||
       location.pathname === "/formulaire" ||
+      location.pathname === "/politique-confidentialite" ||
+      location.pathname === "/conditions-utilisation" ||
       location.pathname.startsWith("/salon/")
     );
 
@@ -92,6 +97,8 @@ const AppContent: React.FC = () => {
         <Route path="/tarifs" element={<Tarifs />} />
         <Route path="/nouscontacter" element={<Nouscontacter />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
+        <Route path="/conditions-utilisation" element={<ConditionsUtilisation />} />
  
         {/* ➡️ Pages suivantes */}
         <Route path="/suivanttarifs" element={<SuivantTarifs />} />

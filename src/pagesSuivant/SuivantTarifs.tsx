@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import { ShieldCheck, FileText } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube, FaTiktok } from "react-icons/fa6";
+import { Link } from "react-router-dom";
  
 type SubscriptionType = "standard" | "vip" | "premium";
  
@@ -299,10 +303,92 @@ const NosServices: React.FC = () => {
         </div>
       </section>
  
+      <YakaFooter />
       <div style={{ height: 24 }} />
     </div>
   );
 };
+
+const footerSocialLinks = [
+  { name: "Facebook", href: "https://www.facebook.com/share/1DYxq5CTHW/", icon: FaFacebookF },
+  { name: "WhatsApp", href: "https://wa.me/243977506981", icon: FaWhatsapp },
+  { name: "TikTok", href: "https://www.tiktok.com/@yaaaka50?_r=1&_t=ZS-94gcyKcHFhI", icon: FaTiktok },
+  { name: "Instagram", href: "https://www.instagram.com/yaaaka50?igsh=bGhhZGNzaGp1dDNv", icon: FaInstagram },
+  { name: "YouTube", href: "https://www.facebook.com/share/1DYxq5CTHW/", icon: FaYoutube },
+];
+
+function YakaFooter() {
+  return (
+    <footer style={styles.footerWrap}>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        style={styles.footerCard}
+      >
+        <div style={styles.footerGlow} />
+        <div style={styles.footerGlass} />
+
+        <div style={styles.footerInner}>
+          <div style={styles.footerTop}>
+            <div style={styles.footerBrandBlock}>
+              <div style={styles.footerBadge}>YAKA</div>
+              <h3 style={styles.footerTitle}>Restez connectés à notre univers.</h3>
+              <p style={styles.footerText}>
+                Retrouvez YAKA sur nos réseaux sociaux et consultez nos pages légales en toute simplicité.
+              </p>
+            </div>
+
+            <div style={styles.footerIcons}>
+              {footerSocialLinks.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <motion.a
+                    key={item.name}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={item.name}
+                    title={item.name}
+                    initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.06 }}
+                    whileHover={{ y: -8, scale: 1.08, rotateX: 10, rotateY: -10 }}
+                    whileTap={{ scale: 0.95 }}
+                    style={styles.footerIconLink}
+                  >
+                    <span style={styles.footerIconGlow} />
+                    <Icon size={18} style={{ position: "relative", zIndex: 2 }} />
+                  </motion.a>
+                );
+              })}
+            </div>
+          </div>
+
+          <div style={styles.footerDivider} />
+
+          <div style={styles.footerBottom}>
+            <div style={styles.footerLegalLinks}>
+              <Link to="/politique-confidentialite" style={styles.footerLegalBtn}>
+                <ShieldCheck size={16} />
+                <span>Politique de confidentialité</span>
+              </Link>
+
+               <Link to="/conditions-utilisation" style={styles.footerLegalBtn}>
+                 <FileText size={16} />
+                 <span>Conditions d'utilisation</span>
+                 </Link>
+            </div>
+
+            <p style={styles.footerCopyright}>© 2026 YAKA. Tous droits réservés.</p>
+          </div>
+        </div>
+      </motion.div>
+    </footer>
+  );
+}
  
 const styles: Record<string, React.CSSProperties> = {
   page: { background: BG, color: "white", minHeight: "100vh" },
@@ -347,6 +433,93 @@ const styles: Record<string, React.CSSProperties> = {
   rating: { fontWeight: 900 },
   city: { marginTop: 6, opacity: 0.75, fontSize: 13 },
   planBadge: { display: "inline-block", padding: "6px 10px", borderRadius: 999, border: `1px solid ${BORDER}`, background: "rgba(0,0,0,0.35)", color: GOLD, fontWeight: 900, fontSize: 12, letterSpacing: 0.6 },
+
+  footerWrap: { maxWidth: 980, margin: "6px auto 0", padding: "0 18px 18px" },
+  footerCard: {
+    position: "relative",
+    overflow: "hidden",
+    borderRadius: 28,
+    border: `1px solid ${BORDER}`,
+    background: "rgba(255,255,255,0.08)",
+    backdropFilter: "blur(20px)",
+    boxShadow: "0 22px 70px rgba(0,0,0,0.35)",
+  },
+  footerGlow: {
+    position: "absolute",
+    inset: 0,
+    pointerEvents: "none",
+    background:
+      "radial-gradient(circle at top left, rgba(212,175,55,0.22), transparent 30%), radial-gradient(circle at bottom right, rgba(212,175,55,0.12), transparent 28%)",
+  },
+  footerGlass: {
+    position: "absolute",
+    inset: 0,
+    pointerEvents: "none",
+    background: "linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04), transparent)",
+  },
+  footerInner: { position: "relative", padding: 22 },
+  footerTop: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 18, flexWrap: "wrap" },
+  footerBrandBlock: { maxWidth: 520 },
+  footerBadge: {
+    display: "inline-block",
+    padding: "7px 12px",
+    borderRadius: 999,
+    border: "1px solid rgba(212,175,55,0.28)",
+    background: "rgba(212,175,55,0.10)",
+    color: "#F5E7A1",
+    fontSize: 11,
+    fontWeight: 900,
+    letterSpacing: 2.2,
+    marginBottom: 10,
+  },
+  footerTitle: { margin: 0, color: "white", fontSize: 24, fontWeight: 900, lineHeight: 1.2 },
+  footerText: { margin: "10px 0 0", color: "rgba(255,255,255,0.75)", lineHeight: 1.6, maxWidth: 500 },
+  footerIcons: { display: "flex", gap: 12, flexWrap: "wrap" },
+  footerIconLink: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    border: "1px solid rgba(255,255,255,0.18)",
+    background: "rgba(255,255,255,0.08)",
+    color: "white",
+    backdropFilter: "blur(16px)",
+    boxShadow: "0 12px 30px rgba(0,0,0,0.22)",
+    textDecoration: "none",
+    transformStyle: "preserve-3d",
+  },
+  footerIconGlow: {
+    position: "absolute",
+    inset: 0,
+    borderRadius: 18,
+    background: "radial-gradient(circle, rgba(212,175,55,0.36), transparent 68%)",
+    opacity: 0,
+    transition: "opacity 220ms ease",
+  },
+  footerDivider: {
+    height: 1,
+    margin: "18px 0",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)",
+  },
+  footerBottom: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, flexWrap: "wrap" },
+  footerLegalLinks: { display: "flex", gap: 10, flexWrap: "wrap" },
+  footerLegalBtn: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "10px 14px",
+    borderRadius: 999,
+    border: "1px solid rgba(255,255,255,0.16)",
+    background: "rgba(255,255,255,0.08)",
+    color: "rgba(255,255,255,0.88)",
+    textDecoration: "none",
+    fontSize: 14,
+    fontWeight: 700,
+  },
+  footerCopyright: { margin: 0, color: "rgba(255,255,255,0.60)", fontSize: 13 },
 };
  
 export default NosServices;

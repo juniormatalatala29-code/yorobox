@@ -1,0 +1,235 @@
+.legal-page {
+  min-height: 100vh;
+  padding: 40px 16px 56px;
+  background:
+    radial-gradient(circle at top left, rgba(212, 175, 55, 0.12), transparent 22%),
+    linear-gradient(180deg, #0b0b0f 0%, #111116 100%);
+}
+
+.legal-container {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.legal-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.legal-card-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at top left, rgba(255, 215, 120, 0.15), transparent 28%);
+}
+
+.legal-card-reflection {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03), transparent 60%);
+}
+
+.legal-content {
+  position: relative;
+  z-index: 1;
+  padding: 32px 24px 36px;
+}
+
+.legal-header {
+  margin-bottom: 28px;
+}
+
+.legal-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  background: rgba(212, 175, 55, 0.12);
+  color: #f5deb3;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.legal-title {
+  margin: 18px 0 8px;
+  color: #ffffff;
+  font-size: 32px;
+  line-height: 1.12;
+  font-weight: 700;
+}
+
+.legal-date {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 15px;
+}
+
+.legal-intro {
+  max-width: 760px;
+  margin-top: 18px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.legal-sections {
+  display: grid;
+  gap: 18px;
+}
+
+.legal-section-card {
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.045);
+  padding: 22px 18px;
+}
+
+.legal-section-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.legal-icon-box {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  background: rgba(212, 175, 55, 0.12);
+  color: #f5deb3;
+}
+
+.legal-section-heading {
+  min-width: 0;
+}
+
+.legal-section-label {
+  margin: 0 0 4px;
+  color: rgba(245, 222, 179, 0.8);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.legal-section-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 21px;
+  line-height: 1.28;
+  font-weight: 650;
+}
+
+.legal-section-body {
+  padding-left: 0;
+}
+
+.legal-text {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 15.5px;
+  line-height: 1.8;
+}
+
+.legal-subtitle {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.legal-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legal-list li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.74);
+  line-height: 1.75;
+}
+
+.legal-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #d4af37;
+}
+
+.legal-stack > * + * {
+  margin-top: 18px;
+}
+
+.legal-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5deb3;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.legal-contact-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212, 175, 55, 0.48);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.legal-mb-16 {
+  margin-bottom: 16px;
+}
+
+.legal-mt-8 {
+  margin-top: 8px;
+}
+
+.legal-mt-16 {
+  margin-top: 16px;
+}
+
+@media (min-width: 768px) {
+  .legal-page {
+    padding: 56px 24px 72px;
+  }
+
+  .legal-content {
+    padding: 42px 36px 42px;
+  }
+
+  .legal-section-card {
+    padding: 24px 24px;
+  }
+
+  .legal-title {
+    font-size: 42px;
+  }
+
+  .legal-section-body {
+    padding-left: 60px;
+  }
+}
