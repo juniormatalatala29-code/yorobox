@@ -27,6 +27,7 @@ html, body {
 /* Root prend toute la hauteur disponible */
 #root {
   min-height: 100%;
+  overflow: hidden;
   
 }
 
