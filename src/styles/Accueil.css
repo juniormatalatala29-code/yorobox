@@ -13,7 +13,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
+  overflow-x: hidden; /* bloque tout scroll */
 }
 
 /* ===== FOND NOIR ===== */
