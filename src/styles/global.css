@@ -24,6 +24,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   color: #fff;
   background: transparent;
+  background: fixed;
 }
 
 /* Root prend toute la hauteur disponible */
