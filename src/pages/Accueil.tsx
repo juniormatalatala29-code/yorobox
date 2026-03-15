@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/Accueil.css";
+import "../styles/Accueils.css";
 import bg from "../assets/image.jpg"; // l'image
 
 const Accueil: React.FC = () => {
