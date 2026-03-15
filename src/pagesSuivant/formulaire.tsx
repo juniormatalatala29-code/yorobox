@@ -178,12 +178,40 @@ const ReservationForm: React.FC = () => {
                 value={formData.commune}
                 onChange={handleChange}
                 required
-              >
-                <option value="">Choisir la commune *</option>
-                {["Limete","Masina","Ndjili","Lemba","Gombe","Ngaliema"].map(c => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+>
+              <option value="">Choisir la commune *</option>
+
+              {[
+    "Bandalungwa",
+    "Barumbu",
+    "Bumbu",
+    "Gombe",
+    "Kalamu",
+    "Kasa-Vubu",
+    "Kimbanseke",
+    "Kinshasa",
+    "Kintambo",
+    "Kisenso",
+    "Lemba",
+    "Limete",
+    "Lingwala",
+    "Makala",
+    "Maluku",
+    "Masina",
+    "Matete",
+    "Mont Ngafula",
+    "Ndjili",
+    "Ngaba",
+    "Ngaliema",
+    "Ngiri-Ngiri",
+    "Nsele",
+    "Selembao"
+  ].map((c) => (
+    <option key={c} value={c}>
+      {c}
+    </option>
+  ))}
+</select>
 
               <input
                 className="yakaForm-input"

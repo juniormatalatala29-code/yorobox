@@ -18,7 +18,7 @@ const Accueil: React.FC = () => {
         </div>
       </header>
 
-      <div className="bottom-section">
+      <div className="bottoms-section">
         {/* Le bouton mène vers la route /suivanttarifs */}
         <Link to="/SuivantTarifs">
           <button className="cta-button">Découvrir nos services</button>
